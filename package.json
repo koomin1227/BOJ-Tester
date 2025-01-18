@@ -14,7 +14,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "boj-tester.openProblem",
+        "command": "boj-tester.openProblemInfo",
         "title": "문제창을 엽니다."
       }
     ],
