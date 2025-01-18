@@ -14,19 +14,19 @@ export async function parseProlem(id: number): Promise<Problem> {
     const title = $("#problem_title").text().trim();
 
     // 문제 설명
-    const description = $("#problem_description").text().trim();
-    const inputDiscription = $("#problem_input").text().trim();
-    const outputDescription = $("#problem_output").text().trim();
+    const description = $("#problem_description").html() ?? '';
+    const inputDiscription = $("#problem_input").html() ?? '';
+    const outputDescription = $("#problem_output").html() ?? '';
 
     // 예제 입력/출력
     const inputs: string[] = [];
     const outputs: string[] = [];
 
-    $("#sampleinput1 pre.sampledata").each((_, el) => {
+    $('section[id^="sampleinput"] pre.sampledata').each((_, el) => {
         inputs.push($(el).text().trim());
     });
 
-    $("#sampleoutput1 pre.sampledata").each((_, el) => {
+    $('section[id^="sampleoutput"] pre.sampledata').each((_, el) => {
         outputs.push($(el).text().trim());
     });
 
