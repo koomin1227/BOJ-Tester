@@ -14,10 +14,27 @@
   "contributes": {
     "commands": [
       {
-        "command": "boj-tester.helloWorld",
-        "title": "Hello World"
+        "command": "boj-tester.openProblem",
+        "title": "문제창을 엽니다."
       }
-    ]
+    ],
+    "views": {
+      "bojTester": [
+        {
+          "id": "bojTesterSidebar",
+          "name": "BOJ Tester"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "bojTester",
+          "title": "BOJ Tester",
+          "icon": "media/icon.webp"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
