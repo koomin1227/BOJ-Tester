@@ -1,4 +1,6 @@
 import * as vscode from 'vscode';
+import { parseProlem } from '../utils/problemParser';
+import { createProblemInfoPanel } from '../panels/problemInfoPanel';
 
 let currentPanel: vscode.WebviewPanel | undefined = undefined;
 
@@ -11,17 +13,9 @@ export async function openProblemInfo(context: vscode.ExtensionContext) {
             vscode.window.showWarningMessage('열려있는 문제 번호 파일이 없습니다.');
             return;
         }
-
-        currentPanel = vscode.window.createWebviewPanel(
-            'BOJ Tester',
-            `${currentOpenedProblemId}`,
-            vscode.ViewColumn.Beside,
-            {
-                enableScripts: true
-            }
-        );
-
-        currentPanel.webview.html = getWebviewContent();
+        const problem = await parseProlem(currentOpenedProblemId);
+        console.log(problem)
+        currentPanel = createProblemInfoPanel(problem);
 
         currentPanel.onDidDispose(
             () => {
@@ -57,6 +51,3 @@ function isNumber(fileName: string) {
     return /^\d+$/.test(fileName);
 }
 
-function getWebviewContent() {
-    return `<h1>Test</h1>`;
-}
