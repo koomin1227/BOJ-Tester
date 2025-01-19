@@ -1,25 +1,38 @@
 import * as vscode from 'vscode';
 import { parseProlem } from '../utils/problemParser';
-import { createProblemInfoPanel } from '../panels/problemInfoPanel';
+import { createProblemInfoPanel, getWebviewContent } from '../panels/problemInfoPanel';
+import { Problem } from '../types';
 
 let currentPanel: vscode.WebviewPanel | undefined = undefined;
+let currentProblem: Problem | undefined = undefined;
 
 export async function openProblemInfo(context: vscode.ExtensionContext) {
     if (currentPanel) {
-        currentPanel.reveal(vscode.ViewColumn.Beside);
+        const currentOpenedProblemId = getCurrentOpenedProblemId();
+
+        if (currentProblem !== undefined && currentOpenedProblemId === null) {
+            vscode.window.showWarningMessage('열려있는 문제 번호 파일이 없습니다.');
+        } 
+        else if (currentProblem !== undefined && currentOpenedProblemId !== null) {
+            if (currentProblem.id !== currentOpenedProblemId) {
+                currentProblem = await parseProlem(currentOpenedProblemId);
+                currentPanel.webview.html = getWebviewContent(currentProblem);
+            }
+            currentPanel.reveal(vscode.ViewColumn.Beside);
+        }
     } else {
         const currentOpenedProblemId = getCurrentOpenedProblemId();
         if (currentOpenedProblemId === null) {
             vscode.window.showWarningMessage('열려있는 문제 번호 파일이 없습니다.');
             return;
         }
-        const problem = await parseProlem(currentOpenedProblemId);
-        console.log(problem)
-        currentPanel = createProblemInfoPanel(problem);
+        currentProblem = await parseProlem(currentOpenedProblemId);
+        currentPanel = createProblemInfoPanel(currentProblem);
 
         currentPanel.onDidDispose(
             () => {
                 currentPanel = undefined;
+                currentProblem = undefined;
             },
             null,
             context.subscriptions

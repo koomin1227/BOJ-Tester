@@ -4,7 +4,7 @@ import { Problem, ProblemStats } from "../types";
 export function createProblemInfoPanel(problem: Problem) {
     const panel = vscode.window.createWebviewPanel(
         'BOJ Tester',
-        `${problem.id}`,
+        `문제`,
         vscode.ViewColumn.Beside,
         {
             enableScripts: true
@@ -15,7 +15,7 @@ export function createProblemInfoPanel(problem: Problem) {
     return panel;
 }
 
-function getWebviewContent(problem: Problem) {
+export function getWebviewContent(problem: Problem) {
     return `
     <!DOCTYPE html>
     <html lang="en">
@@ -83,7 +83,6 @@ function getTestCases(inputs: string[], outputs: string[]) {
                 </div>
                 `;
     }
-    console.log(html)
     return html + '</div>';
 }
 
