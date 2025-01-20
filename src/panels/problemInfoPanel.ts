@@ -89,6 +89,7 @@ export class ProblemInfoPanel {
     private getWebviewContent(problem: Problem): string {
 		const stylesMainUri = this.getMediaFileUri('styles.css');
         const scriptMainUri = this.getMediaFileUri('script.js');
+        const playIconUri = this.getMediaFileUri('play_icon.png');
         
         return `
         <!DOCTYPE html>
@@ -114,7 +115,10 @@ export class ProblemInfoPanel {
             ${problem.inputDiscription}
             <h2>출력</h2>
             ${problem.outputDescription}
-            <h2>테스트 케이스</h2>
+            <div class="input">
+                <h2>테스트 케이스</h2>
+                <button class="run-all-test-cases-btn icon-btn"><img src="${playIconUri}" alt="Copy" height="14"></button>
+            </div>
             ${this.getTestCases(problem.inputs, problem.outputs)}
             <a href="https://www.acmicpc.net/submit/${problem.id}">
                 <button class="submit vs-style">제출하기</button>
@@ -154,6 +158,7 @@ export class ProblemInfoPanel {
 
     private getTestCases(inputs: string[], outputs: string[]) {
 		const copyIconUri = this.getMediaFileUri('copy_icon.png');
+        const playIconUri = this.getMediaFileUri('play_icon.png');
 
         let html = `<div>`;
         for (let i = 0; i < inputs.length; i++) {
@@ -162,6 +167,7 @@ export class ProblemInfoPanel {
                             <div class="input-head">
                                 <h3>입력 ${i + 1}</h3>
                                 <button class="input-copy-btn icon-btn" data-target=${i}><img src="${copyIconUri}" alt="Copy" height="14"></button>
+                                <button class="run-test-case-btn icon-btn" data-target=${i}><img src="${playIconUri}" alt="Copy" height="14"></button>
                             </div>
                             <pre>${inputs[i]}</pre>
                         </div>
