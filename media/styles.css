@@ -14,7 +14,7 @@ body {
     font-family: var(--vscode-font-family);
     background-color: var(--vscode-editor-background);
 }
-button {
+button.vs-style {
     border: none;
     padding: var(--input-padding-vertical) var(--input-padding-horizontal);
     width: 100%;
@@ -25,12 +25,12 @@ button {
     background: var(--vscode-button-background);
 }
 
-button:hover {
+button.vs-style:hover {
     cursor: pointer;
     background: var(--vscode-button-hoverBackground);
 }
 
-button:focus {
+button.vs-style:focus {
     outline-color: var(--vscode-focusBorder);
 }
 
@@ -42,6 +42,27 @@ button.secondary {
 button.secondary:hover {
     background: var(--vscode-button-secondaryHoverBackground);
 }
+
+button.icon-btn {
+    padding: 3px;
+    border: none;
+    border-radius: 10%;
+    text-align: center;
+    margin-bottom: 27px;
+    height: fit-content;
+    width: fit-content;
+    background: transparent;
+}
+
+button.icon-btn:hover {
+    cursor: pointer;
+    background: rgb(45, 46, 46);
+}
+
+button.icon-btn:focus {
+    outline-color: var(--vscode-focusBorder);
+}
+
 
 a {
     text-decoration: none;
@@ -144,5 +165,7 @@ p {
 }
 
 .input-head {
-    display: flex
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
 }

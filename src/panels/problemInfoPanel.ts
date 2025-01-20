@@ -101,7 +101,7 @@ export class ProblemInfoPanel {
                 <h1>${problem.id} - ${problem.title}</h1>
             </a>
             <a href="https://www.acmicpc.net/submit/${problem.id}">
-                <button class="submit">제출하기</button>
+                <button class="submit vs-style">제출하기</button>
             </a>
             ${this.getProblemStatsTable(problem.problemStats)}
             <h2>문제</h2>
@@ -113,7 +113,7 @@ export class ProblemInfoPanel {
             <h2>테스트 케이스</h2>
             ${this.getTestCases(problem.inputs, problem.outputs)}
             <a href="https://www.acmicpc.net/submit/${problem.id}">
-                <button class="submit">제출하기</button>
+                <button class="submit vs-style">제출하기</button>
             </a>
             <script src="${scriptMainUri}"></script>
             </body>
@@ -149,19 +149,25 @@ export class ProblemInfoPanel {
     }
 
     private getTestCases(inputs: string[], outputs: string[]) {
+        const webview = this._panel.webview;
+        const copyIconPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'copy_icon.png');
+		const copyIconUri = webview.asWebviewUri(copyIconPath);
+
         let html = `<div>`;
         for (let i = 0; i < inputs.length; i++) {
             html = html + `<div class="example">
                         <div class="input">
                             <div class="input-head">
                                 <h3>입력 ${i + 1}</h3>
-                                <button class="input-copy-btn" data-target=${i}>복사</button>
+                                <button class="input-copy-btn icon-btn" data-target=${i}><img src="${copyIconUri}" alt="Copy" height="14"></button>
                             </div>
                             <pre>${inputs[i]}</pre>
                         </div>
                         <div class="output">
-                            <h3>출력 ${i + 1}</h3>
-                            <button class="input-copy-btn" data-target=${i}>복사</button>
+                            <div class="input-head">
+                                <h3>출력 ${i + 1}</h3>
+                                <button class="output-copy-btn icon-btn" data-target=${i}><img src="${copyIconUri}" alt="Copy" height="14"></button>
+                            </div>
                             <pre>${outputs[i]}</pre>
                         </div>
                     </div>
