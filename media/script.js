@@ -17,3 +17,10 @@ document.querySelectorAll('.output-copy-btn').forEach(button => {
         vscode.postMessage({ command: 'copyOutput', target: targetId });
     });
 });
+
+document.querySelectorAll('.run-test-case-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-target');
+        vscode.postMessage({ command: 'runTestCase', target: targetId });
+    });
+});

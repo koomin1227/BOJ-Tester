@@ -75,18 +75,18 @@ export function printResult(result: TestCaseResult, testCaseNumber: number) {
     if (result.isError) {
         outputChannel.appendLine(`⚠️  Test Case ${testCaseNumber}: ERROR ❌`);
         outputChannel.appendLine('────────────────────────────────────');
-        outputChannel.appendLine(`  ❗ Error Message:\n    ${result.errorMessage}`);
+        outputChannel.appendLine(`❗ Error Message:\n${result.errorMessage}`);
     } else {
         if (result.isSuccess) {
             outputChannel.appendLine(`🎉  Test Case ${testCaseNumber}: SUCCESS ✅`);
             outputChannel.appendLine('────────────────────────────────────');
-            outputChannel.appendLine(`  ✅ Actual Output:\n    ${result.actualOutput}`);
+            outputChannel.appendLine(`✅ Actual Output:\n${result.actualOutput}`);
         } else {
             outputChannel.appendLine(`🚫  Test Case ${testCaseNumber}: FAILED ❌`);
             outputChannel.appendLine('────────────────────────────────────');
-            outputChannel.appendLine(`  ❌ Actual Output:\n    ${result.actualOutput}`);
+            outputChannel.appendLine(`❌ Actual Output:\n${result.actualOutput}`);
         }
-        outputChannel.appendLine(`  🎯 Expected Output:\n    ${result.expectedOutput}`);
+        outputChannel.appendLine(`🎯 Expected Output:\n${result.expectedOutput}`);
     }
     outputChannel.appendLine('────────────────────────────────────');
     outputChannel.show();

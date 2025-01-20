@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import { Problem, ProblemStats } from "../types";
 import { getCurrentOpenedFile, getCurrentOpenedProblemId } from '../utils/fileParser';
 import { parseProlem } from '../utils/problemParser';
+import { runAndPrintTestCase } from '../utils/testCaseRunner';
 
 export class ProblemInfoPanel {
     public static currentPanel: ProblemInfoPanel | undefined;
@@ -67,14 +68,14 @@ export class ProblemInfoPanel {
         panel.webview.onDidReceiveMessage(
             async (message) => {
                 if (message.command === 'copySourceCode') {
-                    if (ProblemInfoPanel.currentOpendFile !== undefined) {
-                        const fileContent = fs.readFileSync(ProblemInfoPanel.currentOpendFile, 'utf-8');
-                        await vscode.env.clipboard.writeText(fileContent);
-                    } 
+                    const fileContent = fs.readFileSync(ProblemInfoPanel.currentOpendFile!, 'utf-8');
+                    await vscode.env.clipboard.writeText(fileContent);
                 } else if (message.command === 'copyInput') {
-                    await vscode.env.clipboard.writeText(ProblemInfoPanel.currentProblem?.inputs[message.target]!);
+                    await vscode.env.clipboard.writeText(ProblemInfoPanel.currentProblem!.inputs[message.target]!);
                 } else if (message.command === 'copyOutput') {
-                    await vscode.env.clipboard.writeText(ProblemInfoPanel.currentProblem?.outputs[message.target]!);
+                    await vscode.env.clipboard.writeText(ProblemInfoPanel.currentProblem!.outputs[message.target]!);
+                } else if (message.command === 'runTestCase') {
+                    runAndPrintTestCase(ProblemInfoPanel.currentOpendFile!, ProblemInfoPanel.currentProblem!, Number(message.target));
                 }
             },
             undefined,
