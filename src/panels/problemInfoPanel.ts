@@ -79,12 +79,8 @@ export class ProblemInfoPanel {
     }
 
     private getWebviewContent(problem: Problem): string {
-        const webview = this._panel.webview;
-		const stylesPathMainPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'styles.css');
-        const scriptPathMainPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'script.js');
-
-		const stylesMainUri = webview.asWebviewUri(stylesPathMainPath);
-        const scriptMainUri = webview.asWebviewUri(scriptPathMainPath);
+		const stylesMainUri = this.getMediaFileUri('styles.css');
+        const scriptMainUri = this.getMediaFileUri('script.js');
         
         return `
         <!DOCTYPE html>
@@ -149,9 +145,7 @@ export class ProblemInfoPanel {
     }
 
     private getTestCases(inputs: string[], outputs: string[]) {
-        const webview = this._panel.webview;
-        const copyIconPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'copy_icon.png');
-		const copyIconUri = webview.asWebviewUri(copyIconPath);
+		const copyIconUri = this.getMediaFileUri('copy_icon.png');
 
         let html = `<div>`;
         for (let i = 0; i < inputs.length; i++) {
@@ -166,7 +160,7 @@ export class ProblemInfoPanel {
                         <div class="output">
                             <div class="input-head">
                                 <h3>출력 ${i + 1}</h3>
-                                <button class="output-copy-btn icon-btn" data-target=${i}><img src="${copyIconUri}" alt="Copy" height="14"></button>
+                                <button class="output-copy-btn icon-btn" data-target=${i} title="복사"><img src="${copyIconUri}" alt="Copy" height="14"></button>
                             </div>
                             <pre>${outputs[i]}</pre>
                         </div>
@@ -174,5 +168,11 @@ export class ProblemInfoPanel {
                     `;
         }
         return html + '</div>';
+    }
+
+    private getMediaFileUri(fileName: string) {
+        const webview = this._panel.webview;
+        const filePath = vscode.Uri.joinPath(this._extensionUri, 'media', fileName);
+		return webview.asWebviewUri(filePath);
     }
 }
