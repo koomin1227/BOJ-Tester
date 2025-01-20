@@ -21,29 +21,37 @@ export class ProblemInfoPanel {
             return;
         }
         ProblemInfoPanel.currentOpendFile = getCurrentOpenedFile();
-        ProblemInfoPanel.currentProblem = await parseProlem(currentOpenedProblemId);
-        const panel = vscode.window.createWebviewPanel(
-            ProblemInfoPanel.viewType,
-            `문제`,
-            vscode.ViewColumn.Beside,
-            {
-                enableScripts: true
-            }
-        );
-        ProblemInfoPanel.currentPanel = new ProblemInfoPanel(panel, extensionUri);
+        try {        
+            ProblemInfoPanel.currentProblem = await parseProlem(currentOpenedProblemId);
+            const panel = vscode.window.createWebviewPanel(
+                ProblemInfoPanel.viewType,
+                `문제`,
+                vscode.ViewColumn.Beside,
+                {
+                    enableScripts: true
+                }
+            );
+            ProblemInfoPanel.currentPanel = new ProblemInfoPanel(panel, extensionUri);
+        } catch (error) {
+            vscode.window.showWarningMessage('오류가 생겼습니다. 문제 번호나 인터넷 상태를 확인해주세요.');
+        }
     }
 
     public async show() {
         const currentOpenedProblemId = getCurrentOpenedProblemId();
 
         if (ProblemInfoPanel.currentProblem !== undefined && currentOpenedProblemId === null) {
-            vscode.window.showWarningMessage('열려있는 문제 번호 파일이 없습니다.');
+            vscode.window.showWarningMessage('오류가 생겼습니다. 문제 번호나 인터넷 상태를 확인해주세요.');
         } 
         else if (ProblemInfoPanel.currentProblem !== undefined && currentOpenedProblemId !== null) {
             if (ProblemInfoPanel.currentProblem.id !== currentOpenedProblemId) {
                 ProblemInfoPanel.currentOpendFile = getCurrentOpenedFile();
-                ProblemInfoPanel.currentProblem = await parseProlem(currentOpenedProblemId);
-                ProblemInfoPanel.currentPanel!._panel.webview.html = this.getWebviewContent(ProblemInfoPanel.currentProblem);
+                try {
+                    ProblemInfoPanel.currentProblem = await parseProlem(currentOpenedProblemId);
+                    ProblemInfoPanel.currentPanel!._panel.webview.html = this.getWebviewContent(ProblemInfoPanel.currentProblem);
+                } catch (error) {
+                    vscode.window.showWarningMessage('문제 번호가 잘 못 되었습니다.');
+                }
             }
             ProblemInfoPanel.currentPanel!._panel.reveal(vscode.ViewColumn.Beside);
         }
