@@ -24,3 +24,9 @@ document.querySelectorAll('.run-test-case-btn').forEach(button => {
         vscode.postMessage({ command: 'runTestCase', target: targetId });
     });
 });
+
+document.querySelector('.run-all-test-cases-btn').addEventListener('click', () => {
+    vscode.postMessage({ command: 'runAllTestCases' });
+});
+
+

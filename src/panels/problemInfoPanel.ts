@@ -3,8 +3,7 @@ import * as fs from 'fs';
 import { Problem, ProblemStats } from "../types";
 import { getCurrentOpenedFile, getCurrentOpenedProblemId } from '../utils/fileParser';
 import { parseProlem } from '../utils/problemParser';
-import { runAndPrintTestCase } from '../utils/testCaseRunner';
-
+import { runAndPrintAllTestCase, runAndPrintTestCase } from '../utils/testCaseRunner';
 export class ProblemInfoPanel {
     public static currentPanel: ProblemInfoPanel | undefined;
     public static currentProblem: Problem | undefined = undefined;
@@ -76,6 +75,8 @@ export class ProblemInfoPanel {
                     await vscode.env.clipboard.writeText(ProblemInfoPanel.currentProblem!.outputs[message.target]!);
                 } else if (message.command === 'runTestCase') {
                     runAndPrintTestCase(ProblemInfoPanel.currentOpendFile!, ProblemInfoPanel.currentProblem!, Number(message.target));
+                } else if (message.command === 'runAllTestCases') {
+                    runAndPrintAllTestCase(ProblemInfoPanel.currentOpendFile!, ProblemInfoPanel.currentProblem!);
                 }
             },
             undefined,
