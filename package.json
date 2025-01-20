@@ -21,7 +21,8 @@
     "views": {
       "bojTester": [
         {
-          "id": "bojTesterSidebar",
+          "type": "webview",
+          "id": "bojTester",
           "name": "BOJ Tester"
         }
       ]

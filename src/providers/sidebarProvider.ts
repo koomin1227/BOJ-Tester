@@ -1,25 +1,59 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
-export class SidebarProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
-    private _onDidChangeTreeData: vscode.EventEmitter<void | vscode.TreeItem | null | undefined> =
-        new vscode.EventEmitter<void | vscode.TreeItem | null | undefined>();
-    readonly onDidChangeTreeData: vscode.Event<void | vscode.TreeItem | null | undefined> =
-        this._onDidChangeTreeData.event;
+export class SidebarProvider implements vscode.WebviewViewProvider {
+    _view?: vscode.WebviewView;
 
-    getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
-        return element;
+    constructor(private readonly _extensionUri: vscode.Uri) { }
+
+
+    revive(panel: vscode.WebviewView) {
+        this._view = panel;
     }
 
-    getChildren(): vscode.TreeItem[] {
-        const button = new vscode.TreeItem('Open Problem Webview');
-        button.command = {
-            command: 'boj-tester.openProblemInfo',
-            title: '백준 문제 열기',
-        };
-        return [button];
+    resolveWebviewView(webviewView: vscode.WebviewView) {
+        this._view = webviewView;
+
+        webviewView.webview.options = { enableScripts: true };
+
+        webviewView.webview.html = this._getHtmlForSidebar(webviewView.webview);
+        webviewView.webview.onDidReceiveMessage(
+            async (message) => {
+                this.handleMessage(message);
+            },
+        );
     }
 
-    refresh(): void {
-        this._onDidChangeTreeData.fire();
+    private handleMessage(message: any) {
+        switch (message.command) {
+            case "openProblemInfo":
+                vscode.commands.executeCommand("boj-tester.openProblemInfo");
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    private _getHtmlForSidebar(webview: vscode.Webview) {
+        const stylesMainUri = this.getMediaFileUri('sidebar_style.css', webview);
+        const scriptMainUri = this.getMediaFileUri('sidebar_script.js', webview);
+        return `<!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel='stylesheet' href='${stylesMainUri}' />
+        <title>Todo</title>
+      </head>
+      <body>
+        문제 정보
+        <button id="openProblemInfo">문제보기</button>
+        <script src="${scriptMainUri}"></script>
+      </body>
+      </html>`;
+    }
+    private getMediaFileUri(fileName: string, webview: vscode.Webview) {
+        const filePath = vscode.Uri.joinPath(this._extensionUri, 'media', fileName);
+        return webview.asWebviewUri(filePath);
     }
 }
