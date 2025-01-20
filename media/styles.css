@@ -1,0 +1,171 @@
+:root {
+    --container-padding: 20px;
+    --input-padding-vertical: 6px;
+    --input-padding-horizontal: 4px;
+    --input-margin-vertical: 4px;
+    --input-margin-horizontal: 0;
+}
+
+body {
+    padding: 0 var(--container-padding);
+    color: var(--vscode-foreground);
+    font-size: var(--vscode-font-size);
+    font-weight: var(--vscode-font-weight);
+    font-family: var(--vscode-font-family);
+    background-color: var(--vscode-editor-background);
+}
+button.vs-style {
+    border: none;
+    padding: var(--input-padding-vertical) var(--input-padding-horizontal);
+    width: 100%;
+    text-align: center;
+    outline: 1px solid transparent;
+    outline-offset: 2px !important;
+    color: var(--vscode-button-foreground);
+    background: var(--vscode-button-background);
+}
+
+button.vs-style:hover {
+    cursor: pointer;
+    background: var(--vscode-button-hoverBackground);
+}
+
+button.vs-style:focus {
+    outline-color: var(--vscode-focusBorder);
+}
+
+button.secondary {
+    color: var(--vscode-button-secondaryForeground);
+    background: var(--vscode-button-secondaryBackground);
+}
+
+button.secondary:hover {
+    background: var(--vscode-button-secondaryHoverBackground);
+}
+
+button.icon-btn {
+    padding: 3px;
+    border: none;
+    border-radius: 10%;
+    text-align: center;
+    margin-bottom: 27px;
+    height: fit-content;
+    width: fit-content;
+    background: transparent;
+}
+
+button.icon-btn:hover {
+    cursor: pointer;
+    background: rgb(45, 46, 46);
+}
+
+button.icon-btn:focus {
+    outline-color: var(--vscode-focusBorder);
+}
+
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+h1 {
+    position: relative;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 1px;
+    background-color:rgb(87, 87, 87);
+}
+
+h2 {
+    position: relative;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    display: inline-block;
+    border-bottom: 1px solid #0076C0;
+}
+
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 1px;
+    background-color:rgb(87, 87, 87);
+}
+
+h3 {
+    position: relative;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    display: inline-block;
+    border-bottom: 1px solid #0076C0;
+}
+
+h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 1px;
+    background-color:rgb(87, 87, 87);
+}
+
+pre {
+    padding: 10px;
+    background-color:rgb(53, 53, 53);
+}
+
+p {
+    font-size: 14px;
+}
+
+.problem-stats-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    width: 100%;
+    text-align: center;
+}
+
+.problem-stats-table thead tr {
+    font-weight: bold;
+    border-bottom: 1px solid rgb(134, 134, 134)
+}
+
+.problem-stats-table th, .problem-stats-table td {
+    padding: 12px 15px;
+}
+
+.example-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.example {
+    display: flex;
+    gap: 20px;
+
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.input, .output {
+    flex: 1;
+}
+
+.input-head {
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
+}

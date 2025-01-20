@@ -1,14 +1,20 @@
 import * as vscode from 'vscode';
+import { openProblemInfo } from './commands/openProblemInfo';
+import { SidebarProvider } from './providers/sidebarProvider';
 
 export function activate(context: vscode.ExtensionContext) {
-
-	console.log('Congratulations, your extension "boj-tester" is now active!');
-
-	const disposable = vscode.commands.registerCommand('boj-tester.helloWorld', () => {
-		vscode.window.showInformationMessage('Hello World from BOJ Tester!');
-	});
-
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(
+		vscode.window.registerWebviewViewProvider(
+			'bojTester',
+			new SidebarProvider(context.extensionUri)
+		)
+	);
+	
+	context.subscriptions.push(
+		vscode.commands.registerCommand('boj-tester.openProblemInfo', () => {
+			openProblemInfo(context);
+		})
+	);
 }
 
 export function deactivate() { }
