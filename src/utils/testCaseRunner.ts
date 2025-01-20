@@ -9,6 +9,12 @@ interface TestCaseResult {
     expectedOutput: string | null;
     errorMessage: string | null;
 }
+export async function runAndPrintTestCase(filePath: string, problem: Problem, testCaseNumber: number) {
+    const inputData = problem.inputs[testCaseNumber];
+    const outputData = problem.outputs[testCaseNumber];
+    const result = await runTestCase(filePath, inputData, outputData);
+    printResult(result, testCaseNumber + 1);
+}
 
 export async function runTestCase(filePath: string, inputData: string, outputData: string): Promise<TestCaseResult> {
     try {
@@ -63,3 +69,25 @@ async function runCode(filePath: string, inputData: string): Promise<string> {
 	});
 }
 
+export function printResult(result: TestCaseResult, testCaseNumber: number) {
+    const outputChannel = vscode.window.createOutputChannel('Test Results');
+    outputChannel.appendLine('────────────────────────────────────');
+    if (result.isError) {
+        outputChannel.appendLine(`⚠️  Test Case ${testCaseNumber}: ERROR ❌`);
+        outputChannel.appendLine('────────────────────────────────────');
+        outputChannel.appendLine(`  ❗ Error Message:\n    ${result.errorMessage}`);
+    } else {
+        if (result.isSuccess) {
+            outputChannel.appendLine(`🎉  Test Case ${testCaseNumber}: SUCCESS ✅`);
+            outputChannel.appendLine('────────────────────────────────────');
+            outputChannel.appendLine(`  ✅ Actual Output:\n    ${result.actualOutput}`);
+        } else {
+            outputChannel.appendLine(`🚫  Test Case ${testCaseNumber}: FAILED ❌`);
+            outputChannel.appendLine('────────────────────────────────────');
+            outputChannel.appendLine(`  ❌ Actual Output:\n    ${result.actualOutput}`);
+        }
+        outputChannel.appendLine(`  🎯 Expected Output:\n    ${result.expectedOutput}`);
+    }
+    outputChannel.appendLine('────────────────────────────────────');
+    outputChannel.show();
+}
