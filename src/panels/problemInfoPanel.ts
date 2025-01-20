@@ -1,7 +1,9 @@
 import * as vscode from 'vscode';
+import * as fs from 'fs';
 import { Problem, ProblemStats } from "../types";
+import { currentOpendFile } from '../commands/openProblemInfo';
 
-export function createProblemInfoPanel(problem: Problem) {
+export function createProblemInfoPanel(problem: Problem, context: vscode.ExtensionContext) {
     const panel = vscode.window.createWebviewPanel(
         'BOJ Tester',
         `문제`,
@@ -12,6 +14,19 @@ export function createProblemInfoPanel(problem: Problem) {
     );
 
     panel.webview.html = getWebviewContent(problem);
+
+    panel.webview.onDidReceiveMessage(
+        async (message) => {
+            if (message.command === 'copySourceCode') {
+                if (currentOpendFile !== undefined) {
+                    const fileContent = fs.readFileSync(currentOpendFile, 'utf-8');
+                    await vscode.env.clipboard.writeText(fileContent);
+                } 
+            }
+        },
+        undefined,
+        context.subscriptions
+    );
     return panel;
 }
 
@@ -26,7 +41,12 @@ export function getWebviewContent(problem: Problem) {
         ${CSS}
     </head>
     <body>
-        <h1>${problem.id} - ${problem.title}</h1>
+        <a href="https://www.acmicpc.net/problem/${problem.id}">
+            <h1>${problem.id} - ${problem.title}</h1>
+        </a>
+        <a href="https://www.acmicpc.net/submit/${problem.id}">
+            <button class="submit">제출하기</button>
+        </a>
         ${getProblemStatsTable(problem.problemStats)}
         <h2>문제</h2>
         ${problem.description}
@@ -36,7 +56,11 @@ export function getWebviewContent(problem: Problem) {
         ${problem.outputDescription}
         <h2>테스트 케이스</h2>
         ${getTestCases(problem.inputs, problem.outputs)}
-    </body>
+        <a href="https://www.acmicpc.net/submit/${problem.id}">
+            <button class="submit">제출하기</button>
+        </a>
+        ${SCRIPT}
+        </body>
     </html>
     `;
 }
@@ -86,8 +110,74 @@ function getTestCases(inputs: string[], outputs: string[]) {
     return html + '</div>';
 }
 
+const SCRIPT = `
+        <script>
+            const vscode = acquireVsCodeApi();
+            
+            document.querySelector('.submit').addEventListener('click', () => {
+                vscode.postMessage({ command: 'copySourceCode' });
+            });
+
+            window.addEventListener('message', event => {
+                const message = event.data;
+                if (message.command === 'showNotification') {
+                    alert(message.text);
+                }
+            });
+        </script>
+`;
+
 const CSS = `
     <style>
+        :root {
+            --container-padding: 20px;
+            --input-padding-vertical: 6px;
+            --input-padding-horizontal: 4px;
+            --input-margin-vertical: 4px;
+            --input-margin-horizontal: 0;
+        }
+
+        body {
+            padding: 0 var(--container-padding);
+            color: var(--vscode-foreground);
+            font-size: var(--vscode-font-size);
+            font-weight: var(--vscode-font-weight);
+            font-family: var(--vscode-font-family);
+            background-color: var(--vscode-editor-background);
+        }
+        button {
+            border: none;
+            padding: var(--input-padding-vertical) var(--input-padding-horizontal);
+            width: 100%;
+            text-align: center;
+            outline: 1px solid transparent;
+            outline-offset: 2px !important;
+            color: var(--vscode-button-foreground);
+            background: var(--vscode-button-background);
+        }
+
+        button:hover {
+            cursor: pointer;
+            background: var(--vscode-button-hoverBackground);
+        }
+
+        button:focus {
+            outline-color: var(--vscode-focusBorder);
+        }
+
+        button.secondary {
+            color: var(--vscode-button-secondaryForeground);
+            background: var(--vscode-button-secondaryBackground);
+        }
+
+        button.secondary:hover {
+            background: var(--vscode-button-secondaryHoverBackground);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
 
         h1 {
             position: relative;

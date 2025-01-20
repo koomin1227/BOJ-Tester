@@ -5,6 +5,7 @@ import { Problem } from '../types';
 
 let currentPanel: vscode.WebviewPanel | undefined = undefined;
 let currentProblem: Problem | undefined = undefined;
+export let currentOpendFile: string | undefined = undefined;
 
 export async function openProblemInfo(context: vscode.ExtensionContext) {
     if (currentPanel) {
@@ -15,6 +16,7 @@ export async function openProblemInfo(context: vscode.ExtensionContext) {
         } 
         else if (currentProblem !== undefined && currentOpenedProblemId !== null) {
             if (currentProblem.id !== currentOpenedProblemId) {
+                currentOpendFile = getCurrentOpenedFile();
                 currentProblem = await parseProlem(currentOpenedProblemId);
                 currentPanel.webview.html = getWebviewContent(currentProblem);
             }
@@ -26,13 +28,15 @@ export async function openProblemInfo(context: vscode.ExtensionContext) {
             vscode.window.showWarningMessage('열려있는 문제 번호 파일이 없습니다.');
             return;
         }
+        currentOpendFile = getCurrentOpenedFile();
         currentProblem = await parseProlem(currentOpenedProblemId);
-        currentPanel = createProblemInfoPanel(currentProblem);
+        currentPanel = createProblemInfoPanel(currentProblem, context);
 
         currentPanel.onDidDispose(
             () => {
                 currentPanel = undefined;
                 currentProblem = undefined;
+                currentOpendFile = undefined;
             },
             null,
             context.subscriptions
@@ -52,6 +56,16 @@ function getCurrentOpenedProblemId(): number | null {
         }
     }
     return problemId;
+}
+
+function getCurrentOpenedFile() {
+    const activeEditor = vscode.window.activeTextEditor;
+    let file = undefined;
+    if (activeEditor) {
+        file = activeEditor.document.fileName; // 전체 경로
+    
+    }
+    return file;
 }
 
 function extractFileName(filePath: string) {
