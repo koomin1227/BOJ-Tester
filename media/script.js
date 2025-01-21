@@ -1,7 +1,9 @@
 const vscode = acquireVsCodeApi();
-            
-document.querySelector('.submit').addEventListener('click', () => {
-    vscode.postMessage({ command: 'copySourceCode' });
+
+document.querySelectorAll('.submit').forEach(button => {
+    button.addEventListener('click', function() {
+        vscode.postMessage({ command: 'copySourceCode' });
+    });
 });
 
 document.querySelectorAll('.input-copy-btn').forEach(button => {
