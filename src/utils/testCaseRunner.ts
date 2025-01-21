@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as childProcess from 'child_process';
 import { Problem } from '../types';
+import path from 'path';
 const outputChannel = vscode.window.createOutputChannel('Test Results');
 
 interface TestCaseResult {
@@ -95,7 +96,7 @@ export async function runTestCase(filePath: string, inputData: string, outputDat
 
 async function runCode(filePath: string, inputData: string): Promise<string> {
 	return new Promise((resolve, reject) => {
-		const process = childProcess.spawn('python3', [filePath]);
+		const process = getProcessForRunning(filePath);
 
 		let output = '';
 		let error = '';
@@ -121,8 +122,89 @@ async function runCode(filePath: string, inputData: string): Promise<string> {
 	});
 }
 
+function getProcessForRunning(filePath: string) {
+    const extension = filePath.split('.').pop()?.toLowerCase();
+
+    switch (extension) {
+        case 'py':
+            return childProcess.spawn('python3', [filePath]);
+
+        case 'java':
+            const dirName = path.dirname(filePath);
+		    return childProcess.spawn(`java`, ["-cp", dirName, filePath]);
+
+        case 'js':
+            return childProcess.spawn('node', [filePath]);
+
+        case 'cpp':
+            return compileAndRunCpp(filePath);
+
+        case 'c':
+            return compileAndRunC(filePath);
+
+        case 'cs':
+            return childProcess.spawn('dotnet', ['run', '--project', filePath]);
+
+        case 'kt':
+            return childProcess.spawn('kotlinc', [filePath, '-include-runtime', '-d', 'Program.jar'])
+                .on('close', () => childProcess.spawn('java', ['-jar', 'Program.jar']));
+
+        case 'swift':
+            return childProcess.spawn('swift', [filePath]);
+
+        case 'go':
+            return childProcess.spawn('go', ['run', filePath]);
+
+        default:
+            throw new Error(`Unsupported file type: .${extension}`);
+    }
+}
+
+function runJavaProgram(filePath: string) {
+    const classFile = filePath.replace(/\.java$/, '.class');
+    return childProcess.spawn('javac', [filePath])
+        .on('close', (code) => {
+            if (code === 0) {
+                childProcess.spawn('java', ['-cp', getFileDirectory(filePath), getMainClassName(filePath)]);
+            } else {
+                throw new Error('Java compilation failed.');
+            }
+        });
+}
+
+function compileAndRunCpp(filePath: string) {
+    const outputFile = filePath.replace(/\.cpp$/, '');
+    return childProcess.spawn('g++', [filePath, '-o', outputFile])
+        .on('close', (code) => {
+            if (code === 0) {
+                childProcess.spawn(outputFile);
+            } else {
+                throw new Error('C++ compilation failed.');
+            }
+        });
+}
+
+function compileAndRunC(filePath: string) {
+    const outputFile = filePath.replace(/\.c$/, '');
+    return childProcess.spawn('gcc', [filePath, '-o', outputFile])
+        .on('close', (code) => {
+            if (code === 0) {
+                childProcess.spawn(outputFile);
+            } else {
+                throw new Error('C compilation failed.');
+            }
+        });
+}
+
+function getMainClassName(filePath: string): string {
+    return filePath.split('/').pop()?.replace('.java', '') || '';
+}
+
+function getFileDirectory(filePath: string): string {
+    return filePath.substring(0, filePath.lastIndexOf('/'));
+}
+
 export function printResult(result: TestCaseResult, testCaseNumber: number) {
-    // const outputChannel = vscode.window.createOutputChannel('Test Results');
     outputChannel.appendLine('────────────────────────────────────');
     if (result.isError) {
         outputChannel.appendLine(`❗  Test Case ${testCaseNumber}: ERROR ❌`);
