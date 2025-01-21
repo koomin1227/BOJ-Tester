@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import { Problem, ProblemStats } from "../types";
-import { getCurrentOpenedFile, getCurrentOpenedProblemId } from '../utils/fileParser';
+import { getCurrentOpenedFile, getProblemId } from '../utils/fileParser';
 import { parseProlem } from '../utils/problemParser';
 import { runAndPrintAllTestCase, runAndPrintTestCase } from '../utils/testCaseRunner';
 export class ProblemInfoPanel {
@@ -15,22 +15,22 @@ export class ProblemInfoPanel {
 	private _disposables: vscode.Disposable[] = [];
 
     public static async create(extensionUri: vscode.Uri) {
-        const currentOpenedProblemId = getCurrentOpenedProblemId();
-        if (currentOpenedProblemId === null) {
-            vscode.window.showWarningMessage('열려있는 문제 번호 파일이 없습니다.');
+        const activeEditor = vscode.window.activeTextEditor;
+        if (!activeEditor) {
+            vscode.window.showErrorMessage('열린 파일이 없습니다.');
             return;
         }
-        ProblemInfoPanel.currentOpendFile = getCurrentOpenedFile();
-        try {        
-            ProblemInfoPanel.currentProblem = await parseProlem(currentOpenedProblemId);
-            const panel = vscode.window.createWebviewPanel(
-                ProblemInfoPanel.viewType,
-                `문제`,
-                vscode.ViewColumn.Beside,
-                {
-                    enableScripts: true
-                }
-            );
+        
+        try {
+            const problemId = await getProblemId(activeEditor);
+            if (!problemId) {
+                return;
+            }  
+
+            ProblemInfoPanel.currentOpendFile = getCurrentOpenedFile();      
+            ProblemInfoPanel.currentProblem = await parseProlem(problemId);
+
+            const panel = this.createWebviewPanel();
             ProblemInfoPanel.currentPanel = new ProblemInfoPanel(panel, extensionUri);
         } catch (error) {
             vscode.window.showWarningMessage('오류가 생겼습니다. 문제 번호나 인터넷 상태를 확인해주세요.');
@@ -38,23 +38,27 @@ export class ProblemInfoPanel {
     }
 
     public async show() {
-        const currentOpenedProblemId = getCurrentOpenedProblemId();
-
-        if (ProblemInfoPanel.currentProblem !== undefined && currentOpenedProblemId === null) {
-            vscode.window.showWarningMessage('오류가 생겼습니다. 문제 번호나 인터넷 상태를 확인해주세요.');
-        } 
-        else if (ProblemInfoPanel.currentProblem !== undefined && currentOpenedProblemId !== null) {
-            if (ProblemInfoPanel.currentProblem.id !== currentOpenedProblemId) {
-                ProblemInfoPanel.currentOpendFile = getCurrentOpenedFile();
-                try {
-                    ProblemInfoPanel.currentProblem = await parseProlem(currentOpenedProblemId);
-                    ProblemInfoPanel.currentPanel!._panel.webview.html = this.getWebviewContent(ProblemInfoPanel.currentProblem);
-                } catch (error) {
-                    vscode.window.showWarningMessage('문제 번호가 잘 못 되었습니다.');
-                }
-            }
-            ProblemInfoPanel.currentPanel!._panel.reveal(vscode.ViewColumn.Beside);
+        const activeEditor = vscode.window.activeTextEditor;
+        if (!activeEditor) {
+            vscode.window.showErrorMessage('열린 파일이 없습니다.');
+            return;
         }
+
+        if (getCurrentOpenedFile() !== ProblemInfoPanel.currentOpendFile) {
+            const problemId = await getProblemId(activeEditor);
+            if (!problemId) {
+                return;
+            }
+
+            ProblemInfoPanel.currentOpendFile = getCurrentOpenedFile();      
+            try {
+                ProblemInfoPanel.currentProblem = await parseProlem(problemId);
+                ProblemInfoPanel.currentPanel!._panel.webview.html = this.getWebviewContent(ProblemInfoPanel.currentProblem);
+            } catch (error) {
+                vscode.window.showWarningMessage('오류가 생겼습니다. 문제 번호나 인터넷 상태를 확인해주세요.');
+            }
+        }
+        ProblemInfoPanel.currentPanel!._panel.reveal(vscode.ViewColumn.Beside);
     }
 
     private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
@@ -86,6 +90,17 @@ export class ProblemInfoPanel {
 
     public dispose() {
         ProblemInfoPanel.currentPanel = undefined;
+    }
+
+    private static createWebviewPanel() {
+        return vscode.window.createWebviewPanel(
+            ProblemInfoPanel.viewType,
+            `문제`,
+            vscode.ViewColumn.Beside,
+            {
+                enableScripts: true
+            }
+        );
     }
 
     private getWebviewContent(problem: Problem): string {
