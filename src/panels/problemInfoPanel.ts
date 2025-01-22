@@ -32,8 +32,12 @@ export class ProblemInfoPanel {
 
             const panel = this.createWebviewPanel();
             ProblemInfoPanel.currentPanel = new ProblemInfoPanel(panel, extensionUri);
-        } catch (error) {
-            vscode.window.showWarningMessage('오류가 생겼습니다. 문제 번호나 인터넷 상태를 확인해주세요.');
+        } catch (error: any) {
+            if (error.response.status === 404) {
+                vscode.window.showWarningMessage('없는 문제 입니다. 문제 번호를 다시 확인해주세요.');
+            } else {
+                vscode.window.showWarningMessage('오류가 생겼습니다. 잠시후 다시 시도 해주세요.');
+            }
         }
     }
 
@@ -54,8 +58,12 @@ export class ProblemInfoPanel {
             try {
                 ProblemInfoPanel.currentProblem = await parseProlem(problemId);
                 ProblemInfoPanel.currentPanel!._panel.webview.html = this.getWebviewContent(ProblemInfoPanel.currentProblem);
-            } catch (error) {
-                vscode.window.showWarningMessage('오류가 생겼습니다. 문제 번호나 인터넷 상태를 확인해주세요.');
+            } catch (error: any) {
+                if (error.response.status === 404) {
+                    vscode.window.showWarningMessage('없는 문제 입니다. 문제 번호를 다시 확인해주세요.');
+                } else {
+                    vscode.window.showWarningMessage('오류가 생겼습니다. 잠시후 다시 시도 해주세요.');
+                }
             }
         }
         ProblemInfoPanel.currentPanel!._panel.reveal(vscode.ViewColumn.Beside);
