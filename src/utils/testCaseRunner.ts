@@ -29,10 +29,7 @@ export async function runAndPrintAllTestCase(filePath: string, problem: Problem)
         const outputData = problem.outputs[i];
         const result = await runTestCase(filePath, inputData, outputData);
         results.push(result);
-    }
-
-    for (let i = 0; i < results.length; i++) {
-        printResult(results[i], i + 1);
+        printResult(result, i + 1);
     }
 
     const summary = summarizeTestResults(results);
@@ -101,6 +98,11 @@ async function runCode(filePath: string, inputData: string): Promise<string> {
 		let output = '';
 		let error = '';
 
+        const timeout = setTimeout(() => {
+            process.kill();
+            reject(new Error('Process timed out after 3 seconds'));
+        }, 3000);
+
 		process.stdout.on('data', (data) => {
 			output += data.toString();
 		});
@@ -109,13 +111,14 @@ async function runCode(filePath: string, inputData: string): Promise<string> {
 			error += data.toString();
 		});
 
-		process.on('close', (code) => {
-			if (code === 0) {
-				resolve(output.trim());
-			} else {
-				reject(new Error(error || `Process exited with code ${code}`));
-			}
-		});
+        process.on('close', (code) => {
+            clearTimeout(timeout);
+            if (code === 0) {
+                resolve(output.trim());
+            } else {
+                reject(new Error(error || `Process exited with code ${code}`));
+            }
+        });
 
 		process.stdin.write(inputData);
 		process.stdin.end();
@@ -160,18 +163,6 @@ function getProcessForRunning(filePath: string) {
     }
 }
 
-function runJavaProgram(filePath: string) {
-    const classFile = filePath.replace(/\.java$/, '.class');
-    return childProcess.spawn('javac', [filePath])
-        .on('close', (code) => {
-            if (code === 0) {
-                childProcess.spawn('java', ['-cp', getFileDirectory(filePath), getMainClassName(filePath)]);
-            } else {
-                throw new Error('Java compilation failed.');
-            }
-        });
-}
-
 function compileAndRunCpp(filePath: string) {
     const outputFile = filePath.replace(/\.cpp$/, '');
     return childProcess.spawn('g++', [filePath, '-o', outputFile])
@@ -194,14 +185,6 @@ function compileAndRunC(filePath: string) {
                 throw new Error('C compilation failed.');
             }
         });
-}
-
-function getMainClassName(filePath: string): string {
-    return filePath.split('/').pop()?.replace('.java', '') || '';
-}
-
-function getFileDirectory(filePath: string): string {
-    return filePath.substring(0, filePath.lastIndexOf('/'));
 }
 
 export function printResult(result: TestCaseResult, testCaseNumber: number) {
