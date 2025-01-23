@@ -15,6 +15,11 @@ export function activate(context: vscode.ExtensionContext) {
 			openProblemInfo(context);
 		})
 	);
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('boj-tester.createProblem', () => {
+		})
+	);
 }
 
 export function deactivate() { }

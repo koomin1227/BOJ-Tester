@@ -16,6 +16,10 @@
       {
         "command": "boj-tester.openProblemInfo",
         "title": "문제창을 엽니다."
+      },
+      {
+        "command": "boj-tester.createProblem",
+        "title": "문제 파일을 생성합니다."
       }
     ],
     "views": {
