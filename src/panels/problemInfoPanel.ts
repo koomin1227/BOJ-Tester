@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import { Problem, ProblemStats } from "../types";
-import { getCurrentOpenedFile, getCurrentOpenedProblemId } from '../utils/fileParser';
+import { getCurrentOpenedFile, getProblemId } from '../utils/fileParser';
 import { parseProlem } from '../utils/problemParser';
-
+import { runAndPrintAllTestCase, runAndPrintTestCase } from '../utils/testCaseRunner';
 export class ProblemInfoPanel {
     public static currentPanel: ProblemInfoPanel | undefined;
     public static currentProblem: Problem | undefined = undefined;
@@ -15,46 +15,58 @@ export class ProblemInfoPanel {
 	private _disposables: vscode.Disposable[] = [];
 
     public static async create(extensionUri: vscode.Uri) {
-        const currentOpenedProblemId = getCurrentOpenedProblemId();
-        if (currentOpenedProblemId === null) {
-            vscode.window.showWarningMessage('열려있는 문제 번호 파일이 없습니다.');
+        const activeEditor = vscode.window.activeTextEditor;
+        if (!activeEditor) {
+            vscode.window.showErrorMessage('열린 파일이 없습니다.');
             return;
         }
-        ProblemInfoPanel.currentOpendFile = getCurrentOpenedFile();
-        try {        
-            ProblemInfoPanel.currentProblem = await parseProlem(currentOpenedProblemId);
-            const panel = vscode.window.createWebviewPanel(
-                ProblemInfoPanel.viewType,
-                `문제`,
-                vscode.ViewColumn.Beside,
-                {
-                    enableScripts: true
-                }
-            );
+        
+        try {
+            const problemId = await getProblemId(activeEditor);
+            if (!problemId) {
+                return;
+            }  
+
+            ProblemInfoPanel.currentOpendFile = getCurrentOpenedFile();      
+            ProblemInfoPanel.currentProblem = await parseProlem(problemId);
+
+            const panel = this.createWebviewPanel();
             ProblemInfoPanel.currentPanel = new ProblemInfoPanel(panel, extensionUri);
-        } catch (error) {
-            vscode.window.showWarningMessage('오류가 생겼습니다. 문제 번호나 인터넷 상태를 확인해주세요.');
+        } catch (error: any) {
+            if (error.response.status === 404) {
+                vscode.window.showWarningMessage('없는 문제 입니다. 문제 번호를 다시 확인해주세요.');
+            } else {
+                vscode.window.showWarningMessage('오류가 생겼습니다. 잠시후 다시 시도 해주세요.');
+            }
         }
     }
 
     public async show() {
-        const currentOpenedProblemId = getCurrentOpenedProblemId();
+        const activeEditor = vscode.window.activeTextEditor;
+        if (!activeEditor) {
+            vscode.window.showErrorMessage('열린 파일이 없습니다.');
+            return;
+        }
 
-        if (ProblemInfoPanel.currentProblem !== undefined && currentOpenedProblemId === null) {
-            vscode.window.showWarningMessage('오류가 생겼습니다. 문제 번호나 인터넷 상태를 확인해주세요.');
-        } 
-        else if (ProblemInfoPanel.currentProblem !== undefined && currentOpenedProblemId !== null) {
-            if (ProblemInfoPanel.currentProblem.id !== currentOpenedProblemId) {
-                ProblemInfoPanel.currentOpendFile = getCurrentOpenedFile();
-                try {
-                    ProblemInfoPanel.currentProblem = await parseProlem(currentOpenedProblemId);
-                    ProblemInfoPanel.currentPanel!._panel.webview.html = this.getWebviewContent(ProblemInfoPanel.currentProblem);
-                } catch (error) {
-                    vscode.window.showWarningMessage('문제 번호가 잘 못 되었습니다.');
+        if (getCurrentOpenedFile() !== ProblemInfoPanel.currentOpendFile) {
+            const problemId = await getProblemId(activeEditor);
+            if (!problemId) {
+                return;
+            }
+
+            ProblemInfoPanel.currentOpendFile = getCurrentOpenedFile();      
+            try {
+                ProblemInfoPanel.currentProblem = await parseProlem(problemId);
+                ProblemInfoPanel.currentPanel!._panel.webview.html = this.getWebviewContent(ProblemInfoPanel.currentProblem);
+            } catch (error: any) {
+                if (error.response.status === 404) {
+                    vscode.window.showWarningMessage('없는 문제 입니다. 문제 번호를 다시 확인해주세요.');
+                } else {
+                    vscode.window.showWarningMessage('오류가 생겼습니다. 잠시후 다시 시도 해주세요.');
                 }
             }
-            ProblemInfoPanel.currentPanel!._panel.reveal(vscode.ViewColumn.Beside);
         }
+        ProblemInfoPanel.currentPanel!._panel.reveal(vscode.ViewColumn.Beside);
     }
 
     private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
@@ -67,14 +79,16 @@ export class ProblemInfoPanel {
         panel.webview.onDidReceiveMessage(
             async (message) => {
                 if (message.command === 'copySourceCode') {
-                    if (ProblemInfoPanel.currentOpendFile !== undefined) {
-                        const fileContent = fs.readFileSync(ProblemInfoPanel.currentOpendFile, 'utf-8');
-                        await vscode.env.clipboard.writeText(fileContent);
-                    } 
+                    const fileContent = fs.readFileSync(ProblemInfoPanel.currentOpendFile!, 'utf-8');
+                    await vscode.env.clipboard.writeText(fileContent);
                 } else if (message.command === 'copyInput') {
-                    await vscode.env.clipboard.writeText(ProblemInfoPanel.currentProblem?.inputs[message.target]!);
+                    await vscode.env.clipboard.writeText(ProblemInfoPanel.currentProblem!.inputs[message.target]!);
                 } else if (message.command === 'copyOutput') {
-                    await vscode.env.clipboard.writeText(ProblemInfoPanel.currentProblem?.outputs[message.target]!);
+                    await vscode.env.clipboard.writeText(ProblemInfoPanel.currentProblem!.outputs[message.target]!);
+                } else if (message.command === 'runTestCase') {
+                    runAndPrintTestCase(ProblemInfoPanel.currentOpendFile!, ProblemInfoPanel.currentProblem!, Number(message.target));
+                } else if (message.command === 'runAllTestCases') {
+                    runAndPrintAllTestCase(ProblemInfoPanel.currentOpendFile!, ProblemInfoPanel.currentProblem!);
                 }
             },
             undefined,
@@ -86,14 +100,27 @@ export class ProblemInfoPanel {
         ProblemInfoPanel.currentPanel = undefined;
     }
 
+    private static createWebviewPanel() {
+        return vscode.window.createWebviewPanel(
+            ProblemInfoPanel.viewType,
+            `문제`,
+            vscode.ViewColumn.Beside,
+            {
+                enableScripts: true
+            }
+        );
+    }
+
     private getWebviewContent(problem: Problem): string {
 		const stylesMainUri = this.getMediaFileUri('styles.css');
         const scriptMainUri = this.getMediaFileUri('script.js');
+        const playIconUri = this.getMediaFileUri('play_icon.png');
         
         return `
         <!DOCTYPE html>
         <html lang="en">
         <head>
+            <base href="https://www.acmicpc.net/">
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>${problem.id}</title>
@@ -114,7 +141,10 @@ export class ProblemInfoPanel {
             ${problem.inputDiscription}
             <h2>출력</h2>
             ${problem.outputDescription}
-            <h2>테스트 케이스</h2>
+            <div class="input">
+                <h2>테스트 케이스</h2>
+                <button class="run-all-test-cases-btn icon-btn"><img src="${playIconUri}" alt="Copy" height="14"></button>
+            </div>
             ${this.getTestCases(problem.inputs, problem.outputs)}
             <a href="https://www.acmicpc.net/submit/${problem.id}">
                 <button class="submit vs-style">제출하기</button>
@@ -154,6 +184,7 @@ export class ProblemInfoPanel {
 
     private getTestCases(inputs: string[], outputs: string[]) {
 		const copyIconUri = this.getMediaFileUri('copy_icon.png');
+        const playIconUri = this.getMediaFileUri('play_icon.png');
 
         let html = `<div>`;
         for (let i = 0; i < inputs.length; i++) {
@@ -162,6 +193,7 @@ export class ProblemInfoPanel {
                             <div class="input-head">
                                 <h3>입력 ${i + 1}</h3>
                                 <button class="input-copy-btn icon-btn" data-target=${i}><img src="${copyIconUri}" alt="Copy" height="14"></button>
+                                <button class="run-test-case-btn icon-btn" data-target=${i}><img src="${playIconUri}" alt="Copy" height="14"></button>
                             </div>
                             <pre>${inputs[i]}</pre>
                         </div>

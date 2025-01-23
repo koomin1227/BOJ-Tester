@@ -127,7 +127,8 @@ pre {
 }
 
 p {
-    font-size: 14px;
+    font-size: 15px;
+    line-height: 2;
 }
 
 .problem-stats-table {
