@@ -1,5 +1,6 @@
 {
   "name": "boj-tester",
+  "publisher": "koomin1227",
   "displayName": "BOJ Tester",
   "description": "백준 문제를 체점해주고, 다양한 부가기능을 제공",
   "version": "0.0.1",
@@ -12,10 +13,28 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
+    "menus": {
+      "view/title": [
+        {
+          "when": "view == bojTester",
+          "group": "navigation",
+          "command": "boj-tester.openSettings"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "boj-tester.openProblemInfo",
         "title": "문제창을 엽니다."
+      },
+      {
+        "command": "boj-tester.createProblem",
+        "title": "문제 파일을 생성합니다."
+      },
+      {
+        "command": "boj-tester.openSettings",
+        "title": "설정창을 엽니다.",
+        "icon": "$(gear)"
       }
     ],
     "views": {
@@ -32,9 +51,20 @@
         {
           "id": "bojTester",
           "title": "BOJ Tester",
-          "icon": "media/icon.webp"
+          "icon": "media/icon.png"
         }
       ]
+    },
+
+    "configuration": {
+      "type": "object",
+      "title": "BOJ Tester",
+      "properties": {
+        "BOJ-Tester.defaultLanguage": {
+          "type": "string",
+          "description": "파일 생성 시 사용할 언어의 확장자 명을 입려해주세요. ex) py, java"
+        }
+      }
     }
   },
   "scripts": {

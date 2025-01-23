@@ -30,10 +30,10 @@ export async function getProblemId(editor: vscode.TextEditor): Promise<number | 
     return await promptForProblemId();
 }
 
-async function promptForProblemId(): Promise<number | null> {
+export async function promptForProblemId(): Promise<number | null> {
     const userInput = await vscode.window.showInputBox({
         placeHolder: 'Enter a value',
-        prompt: '문제 정보를 볼 문제의 번호를 입력해주세요.',
+        prompt: '문제의 번호를 입력해주세요.',
         validateInput: (value) => {
             if (!value) { return '값을 입력해야 합니다.'; }
             if (!/^\d+$/.test(value)) { return '숫자만 입력해야 합니다.'; }

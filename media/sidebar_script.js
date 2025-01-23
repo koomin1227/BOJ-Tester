@@ -5,3 +5,9 @@ document.getElementById('openProblemInfo').addEventListener('click', () => {
         command: 'openProblemInfo'
     });
 });
+
+document.getElementById('createProblem').addEventListener('click', () => {
+    vscode.postMessage({
+        command: 'createProblem'
+    });
+});
