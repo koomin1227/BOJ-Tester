@@ -1,8 +1,7 @@
 import * as vscode from 'vscode';
 import path from 'path';
 import { promptForProblemId } from '../utils/fileParser';
-
-const DEFAULT_EXTENSTION= 'py';
+import { getDefaultLanguage } from './configuration';
 
 export async function createProblemFile() {
     const workSpaceRootFolder = getWorkSpaceRootFolder();
@@ -14,7 +13,8 @@ export async function createProblemFile() {
     if (problemId === null) {
         return null;
     }
-    const filePath = await createFile(workSpaceRootFolder, `${problemId}.${DEFAULT_EXTENSTION}`);
+    const extension = getDefaultLanguage();
+    const filePath = await createFile(workSpaceRootFolder, `${problemId}.${extension}`);
     if (filePath === null) {
         return null;
     }

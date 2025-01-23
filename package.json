@@ -1,5 +1,6 @@
 {
   "name": "boj-tester",
+  "publisher": "koomin1227",
   "displayName": "BOJ Tester",
   "description": "백준 문제를 체점해주고, 다양한 부가기능을 제공",
   "version": "0.0.1",
@@ -39,6 +40,16 @@
           "icon": "media/icon.webp"
         }
       ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "BOJ Tester",
+      "properties": {
+        "BOJ-Tester.defaultLanguage": {
+          "type": "string",
+          "description": "파일 생성 시 사용할 언어의 확장자 명을 입려해주세요. ex) py, java"
+        }
+      }
     }
   },
   "scripts": {
