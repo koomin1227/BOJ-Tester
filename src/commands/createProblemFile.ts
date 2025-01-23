@@ -8,6 +8,8 @@ export async function createAndOpenProblemFile(context: vscode.ExtensionContext)
         return;
     }
     await openFile(filePath);
+
+    await openProblemInfo(context);
 }
 
 async function openFile(filePath: string) {
