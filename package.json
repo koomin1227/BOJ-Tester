@@ -13,6 +13,15 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
+    "menus": {
+      "view/title": [
+        {
+          "when": "view == bojTester",
+          "group": "navigation",
+          "command": "boj-tester.openSettings"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "boj-tester.openProblemInfo",
@@ -21,6 +30,11 @@
       {
         "command": "boj-tester.createProblem",
         "title": "문제 파일을 생성합니다."
+      },
+      {
+        "command": "boj-tester.openSettings",
+        "title": "설정창을 엽니다.",
+        "icon": "$(gear)"
       }
     ],
     "views": {
@@ -41,6 +55,7 @@
         }
       ]
     },
+
     "configuration": {
       "type": "object",
       "title": "BOJ Tester",

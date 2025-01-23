@@ -50,9 +50,9 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
       </head>
       <body>
         문제 정보
-        <button id="openProblemInfo">문제보기</button>
-
-        <button id="createProblem">문제 생성</button>
+        <button id="openProblemInfo">문제 보기</button>
+        파일 생성
+        <button id="createProblem">문제 파일 생성</button>
         <script src="${scriptMainUri}"></script>
       </body>
       </html>`;
