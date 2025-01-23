@@ -28,6 +28,9 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
             case "openProblemInfo":
                 vscode.commands.executeCommand("boj-tester.openProblemInfo");
                 break;
+            case "createProblem":
+                vscode.commands.executeCommand("boj-tester.createProblem");
+                break;
             default:
                 break;
         }
@@ -48,6 +51,8 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
       <body>
         문제 정보
         <button id="openProblemInfo">문제보기</button>
+
+        <button id="createProblem">문제 생성</button>
         <script src="${scriptMainUri}"></script>
       </body>
       </html>`;

@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { openProblemInfo } from './commands/openProblemInfo';
 import { SidebarProvider } from './providers/sidebarProvider';
+import { createAndOpenProblemFile } from './commands/createProblemFile';
 
 export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
@@ -18,6 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.commands.registerCommand('boj-tester.createProblem', () => {
+			createAndOpenProblemFile(context);
 		})
 	);
 }
