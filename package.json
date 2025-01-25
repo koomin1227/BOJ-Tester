@@ -3,7 +3,8 @@
   "publisher": "koomin1227",
   "displayName": "BOJ Tester",
   "description": "백준 문제를 체점해주고, 다양한 부가기능을 제공",
-  "version": "0.0.1",
+  "icon": "media/default_icon.png",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.96.0"
   },
