@@ -1,71 +1,68 @@
-# boj-tester README
+# BOJ Tester
 
-This is the README for your extension "boj-tester". After writing up a brief description, we recommend including the following sections.
+BOJ Tester는 [백준 온라인 저지(BOJ)](https://www.acmicpc.net)의 문제를 더욱 효율적으로 풀 수 있도록 도와주는 Visual Studio Code 확장 프로그램입니다.
+이 확장 기능을 사용하면 vs code 안에서 **문제 파일을 열고**, **문제 정보를 확인하며**, **테스트 케이스 실행** 및 **코드 제출**을 쉽게 할 수 있습니다.
 
-## Features
+## 주요 기능
+![사용 예](https://github.com/user-attachments/assets/7a163b5f-3525-4a39-97d7-84217c5e3a0d)
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+### 1. 문제 보기
+- 문제 번호로 된 파일을 열고 “문제 보기” 버튼을 클릭하면, 오른쪽 패널에 해당 문제의 정보를 띄워줍니다.
+- 파일 이름이 문제 번호가 아닐 경우, 직접 문제 번호를 입력하여 문제 정보를 확인할 수 있습니다.
 
-For example if there is an image subfolder under your extension project workspace:
+### 2. 테스트 케이스 실행
+- 작성한 코드를 파일 확장자에 맞는 언어로 실행하여 테스트할 수 있습니다.
+- 단일 테스트 케이스 실행 및 전체 테스트 케이스 실행 기능 제공.
+#### 지원 언어
+`python`, `java`, `java script`, `c++`, `c`, `c#`, `kotlin`, `swift`
 
-\!\[feature X\]\(images/feature-x.png\)
+### 3. 코드 제출 기능
+- “제출하기” 버튼을 클릭하면 BOJ 제출 창이 열리며, 코드가 클립보드에 자동으로 복사됩니다.
+- 제출 페이지에서 손쉽게 코드를 붙여넣고 제출할 수 있습니다.
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+### 4. 문제 파일 생성
+- “문제 파일 생성” 버튼을 클릭하고 문제 번호를 입력하면, 해당 번호의 문제 파일을 자동으로 생성합니다.
+- 생성된 문제 파일을 자동으로 열고 문제 정보를 띄워줍니다.
 
-## Requirements
+## 요구 사항
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+BOJ Tester를 사용하려면 해당 프로그래밍 언어의 실행 환경이 필요합니다:
+
+
+
 
 ## Extension Settings
+BOJ Tester는 다음과 같은 설정을 제공합니다:
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+* `BOJ-Tester.defaultLanguage`: 문제 파일 생성 시 사용할 기본 확장자 (예: py, java, cpp)
+### 설정 방법
+1. BOJ Tester 사이드바 열기
+2. 사이드바의 제목 오른쪽에 위치한 톱니바퀴 아이콘 클릭
+3. 설정창에서 설정 변경
 
-For example:
+## 알려진 문제
 
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
+- BOJ 서버가 다운되었거나 네트워크 연결이 불안정한 경우 문제 정보 보기 기능이 원활하지 않을 수 있습니다.
+- 테스트 케이스 실행 중 지원되지 않는 확장자를 사용할 경우 오류가 발생할 수 있습니다.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
 ### 1.0.0
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+- 문제 보기 기능 추가
+- 테스트 케이스 실행 지원 (단일/전체)
+- 제출 기능 추가 (클립보드 자동 복사)
+- 문제 파일 생성 기능 추가
 
 ---
 
-## Following extension guidelines
+## 개발자
+- [koomin1227](https://github.com/koomin1227)
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+## 문의 및 피드백
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+문제가 발생하거나 개선이 필요한 사항이 있다면 아래의 링크를 통해 문의해 주세요.
+- GitHub 이슈 등록: [GitHub Issues](https://github.com/koomin1227/BOJ-Tester/issues)
+- email : koomin1227@naver.com
 
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+**Enjoy BOJ Tester! 🚀**

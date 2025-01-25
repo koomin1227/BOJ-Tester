@@ -1,8 +1,10 @@
 {
   "name": "boj-tester",
+  "publisher": "koomin1227",
   "displayName": "BOJ Tester",
   "description": "백준 문제를 체점해주고, 다양한 부가기능을 제공",
-  "version": "0.0.1",
+  "icon": "media/default_icon.png",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.96.0"
   },
@@ -12,12 +14,59 @@
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
+    "menus": {
+      "view/title": [
+        {
+          "when": "view == bojTester",
+          "group": "navigation",
+          "command": "boj-tester.openSettings"
+        }
+      ]
+    },
     "commands": [
       {
-        "command": "boj-tester.helloWorld",
-        "title": "Hello World"
+        "command": "boj-tester.openProblemInfo",
+        "title": "문제창을 엽니다."
+      },
+      {
+        "command": "boj-tester.createProblem",
+        "title": "문제 파일을 생성합니다."
+      },
+      {
+        "command": "boj-tester.openSettings",
+        "title": "설정창을 엽니다.",
+        "icon": "$(gear)"
       }
-    ]
+    ],
+    "views": {
+      "bojTester": [
+        {
+          "type": "webview",
+          "id": "bojTester",
+          "name": "BOJ Tester"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "bojTester",
+          "title": "BOJ Tester",
+          "icon": "media/icon.png"
+        }
+      ]
+    },
+
+    "configuration": {
+      "type": "object",
+      "title": "BOJ Tester",
+      "properties": {
+        "BOJ-Tester.defaultLanguage": {
+          "type": "string",
+          "description": "파일 생성 시 사용할 언어의 확장자 명을 입려해주세요. ex) py, java"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -28,14 +77,18 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.96.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/vscode": "^1.96.0",
     "@typescript-eslint/eslint-plugin": "^8.17.0",
     "@typescript-eslint/parser": "^8.17.0",
-    "eslint": "^9.16.0",
-    "typescript": "^5.7.2",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1"
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.16.0",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "cheerio": "^1.0.0"
   }
 }
