@@ -11,3 +11,9 @@ document.getElementById('createProblem').addEventListener('click', () => {
         command: 'createProblem'
     });
 });
+
+document.getElementById('toggleAutocomplete').addEventListener('click', () => {
+    vscode.postMessage({
+        command: 'toggleAutocomplete'
+    });
+});

@@ -27,7 +27,7 @@ export async function toggleAutocomplete() {
     isFeatureEnabled = !isFeatureEnabled;
 }
 
-async function getFeatureStatus(): Promise<boolean> {
+export async function getFeatureStatus(): Promise<boolean> {
     const config = vscode.workspace.getConfiguration('editor');
 
     const quickSuggestions = config.get<{ other: boolean; comments: boolean; strings: boolean }>('quickSuggestions', { other: true, comments: true, strings: true });
