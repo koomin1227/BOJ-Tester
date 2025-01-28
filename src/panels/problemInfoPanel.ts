@@ -137,7 +137,6 @@ export class ProblemInfoPanel {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>${problem.id}</title>
             <link href="${stylesMainUri}" rel="stylesheet">
-            
         </head>
         <body>
             <a href="https://www.acmicpc.net/problem/${problem.id}">
@@ -147,12 +146,7 @@ export class ProblemInfoPanel {
                 <button class="submit vs-style">제출하기</button>
             </a>
             ${this.getProblemStatsTable(problem.problemStats)}
-            <h2>문제</h2>
-            ${problem.description}
-            <h2>입력</h2>
-            ${problem.inputDiscription}
-            <h2>출력</h2>
-            ${problem.outputDescription}
+            ${this.getDescriptions(problem.descriptions)}
             <div class="input">
                 <h2>테스트 케이스</h2>
                 <button class="run-all-test-cases-btn icon-btn"><img src="${playIconUri}" alt="Copy" height="14"></button>
@@ -164,9 +158,20 @@ export class ProblemInfoPanel {
                 <button class="submit vs-style">제출하기</button>
             </a>
             <script src="${scriptMainUri}"></script>
+            <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+            <script src="https://ddo7jzca0m2vt.cloudfront.net/js/mathjax.js"></script>
+            
             </body>
         </html>
         `;
+    }
+
+    getDescriptions(descriptions: string[]) {
+        let html = '';
+        descriptions.forEach((description) => {
+            html += description;
+        });
+        return html;
     }
 
     private getProblemStatsTable(problemStats: ProblemStats) {

@@ -25,9 +25,16 @@ async function parseProblem(id: number): Promise<Problem> {
     const title = $("#problem_title").text().trim();
 
     // 문제 설명
-    const description = $("#problem_description").html() ?? '';
-    const inputDiscription = $("#problem_input").html() ?? '';
-    const outputDescription = $("#problem_output").html() ?? '';
+
+    const descriptions: string[] = [];
+    $('.problem-section').each((index, element) => {
+        const problemText = $(element).find('.problem-text').text().trim();
+
+        if (problemText) {
+            const sectionHtml = $(element).html();
+            descriptions.push(sectionHtml ?? '');
+        }
+    });
 
     // 예제 입력/출력
     const inputs: string[] = [];
@@ -56,9 +63,7 @@ async function parseProblem(id: number): Promise<Problem> {
     return {
         id,
         title,
-        description,
-        inputDiscription,
-        outputDescription,
+        descriptions,
         inputs,
         outputs,
         DefaultTestCaseCount: inputs.length,

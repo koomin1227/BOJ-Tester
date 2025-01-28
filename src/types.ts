@@ -9,9 +9,7 @@ export interface ProblemStats {
 export interface Problem {
     id: number;
     title: string;
-    description: string;
-    inputDiscription: string;
-    outputDescription: string;
+    descriptions: string[];
     DefaultTestCaseCount: number;
     inputs: string[];
     outputs: string[];
