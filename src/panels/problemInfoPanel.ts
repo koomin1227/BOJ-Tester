@@ -146,6 +146,8 @@ export class ProblemInfoPanel {
                 <button class="run-all-test-cases-btn icon-btn"><img src="${playIconUri}" alt="Copy" height="14"></button>
             </div>
             ${this.getTestCases(problem.inputs, problem.outputs)}
+            <button id="addTestCase" class="submit vs-style">테스트 케이스 추가</button>
+            <br></br>
             <a href="https://www.acmicpc.net/submit/${problem.id}">
                 <button class="submit vs-style">제출하기</button>
             </a>
@@ -186,7 +188,7 @@ export class ProblemInfoPanel {
 		const copyIconUri = this.getMediaFileUri('copy_icon.png');
         const playIconUri = this.getMediaFileUri('play_icon.png');
 
-        let html = `<div>`;
+        let html = `<div id="testCaseContainer">`;
         for (let i = 0; i < inputs.length; i++) {
             html = html + `<div class="example">
                         <div class="input">

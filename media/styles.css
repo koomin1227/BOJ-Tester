@@ -34,6 +34,28 @@ button.vs-style:focus {
     outline-color: var(--vscode-focusBorder);
 }
 
+button.second-button {
+    border: none;
+    padding: var(--input-padding-vertical) var(--input-padding-horizontal);
+    width: 100%;
+    text-align: center;
+    outline: 1px solid transparent;
+    outline-offset: 2px !important;
+    color: var(--vscode-button-foreground);
+    background: slategrey;
+}
+
+button.second-button:hover {
+    cursor: pointer;
+    background: rgb(74, 85, 96);
+}
+
+button.second-button:focus {
+    outline-color: rgb(74, 85, 96);
+}
+
+second-button
+
 button.secondary {
     color: var(--vscode-button-secondaryForeground);
     background: var(--vscode-button-secondaryBackground);
@@ -169,4 +191,13 @@ p {
     display: flex;
     gap: 3px;
     align-items: flex-end;
+}
+
+.test-case-textarea {
+    padding: 10px;
+    background-color:rgb(53, 53, 53);
+    color: white;
+    width: 100%;
+    resize: none;
+    box-sizing: border-box;
 }

@@ -32,3 +32,34 @@ document.querySelector('.run-all-test-cases-btn').addEventListener('click', () =
 });
 
 
+
+document.getElementById('addTestCase').addEventListener('click', () => {
+    const testCaseContainer = document.getElementById('testCaseContainer');
+
+    const testCaseForm = document.createElement('div');
+    testCaseForm.id = 'testCaseForm';
+    testCaseForm.innerHTML = `
+    <div class="example">
+        <div class="input">
+            <div class="input-head">
+                <h3>입력</h3>
+            </div>
+            <textarea id="inputField" class="test-case-textarea" rows="4" placeholder="입력값을 입력하세요..."></textarea>
+        </div>
+        <div class="output">
+            <div class="input-head">
+                <h3>출력</h3>
+            </div>
+            <textarea id="outputField" class="test-case-textarea" rows="4" placeholder="출력값을 입력하세요..."></textarea>
+        </div>
+    </div>
+    <div class="example">
+        <button class="vs-style" id="confirmAddTestCase">추가</button>
+        <button class="vs-style second-button" id="cancelAddTestCase">취소</button>
+    </div>
+    `;
+
+    testCaseContainer.appendChild(testCaseForm);
+});
+
+
