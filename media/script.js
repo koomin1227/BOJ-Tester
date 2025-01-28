@@ -27,11 +27,16 @@ document.querySelectorAll('.run-test-case-btn').forEach(button => {
     });
 });
 
+document.querySelectorAll('.delete-test-case-btn').forEach(button => {
+    button.addEventListener('click', function() {
+        const targetId = this.getAttribute('data-target');
+        vscode.postMessage({ command: 'deleteTestCase', target: targetId });
+    });
+});
+
 document.querySelector('.run-all-test-cases-btn').addEventListener('click', () => {
     vscode.postMessage({ command: 'runAllTestCases' });
 });
-
-
 
 document.getElementById('addTestCase').addEventListener('click', () => {
     const testCaseContainer = document.getElementById('testCaseContainer');

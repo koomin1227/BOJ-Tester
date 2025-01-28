@@ -4,7 +4,7 @@ import { Problem, ProblemStats } from "../types";
 import { getCurrentOpenedFile, getProblemId } from '../utils/fileParser';
 import { parseProlem } from '../utils/problemParser';
 import { runAndPrintAllTestCase, runAndPrintTestCase } from '../utils/testCaseRunner';
-import { addTestCase } from '../utils/testCaseManager';
+import { addTestCase, deleteTestCase } from '../utils/testCaseManager';
 export class ProblemInfoPanel {
     public static currentPanel: ProblemInfoPanel | undefined;
     public static currentProblem: Problem | undefined = undefined;
@@ -92,6 +92,9 @@ export class ProblemInfoPanel {
                     runAndPrintAllTestCase(ProblemInfoPanel.currentOpendFile!, ProblemInfoPanel.currentProblem!);
                 } else if (message.command === 'addTestCase') {
                     addTestCase(message.input, message.output, ProblemInfoPanel.currentProblem!);
+                    ProblemInfoPanel.currentPanel!._panel.webview.html = this.getWebviewContent(ProblemInfoPanel.currentProblem!);
+                } else if (message.command === 'deleteTestCase') {
+                    deleteTestCase(message.target, ProblemInfoPanel.currentProblem!);
                     ProblemInfoPanel.currentPanel!._panel.webview.html = this.getWebviewContent(ProblemInfoPanel.currentProblem!);
                 }
             },
@@ -202,9 +205,8 @@ export class ProblemInfoPanel {
                                 <h3>입력 ${i + 1}</h3>
                                 <button class="input-copy-btn icon-btn" data-target=${i}><img src="${copyIconUri}" alt="Copy" height="14"></button>
                                 <button class="edit-test-case-btn icon-btn" data-target=${i} ${i < testCaseCount? 'hidden' : ''}><img src="${editIconUri}" alt="Copy" height="14"></button>
-                                <button class="delete-test-case-btn icon-btn" data-target=${i} ${i < testCaseCount? 'hidden' : ''}><img src="${deleteIconUri}" alt="Copy" height="14"></button>
+                                <button class="delete-test-case-btn icon-btn" data-target=${i}${i < testCaseCount? ' hidden' : ''}><img src="${deleteIconUri}" alt="Copy" height="14"></button>
                                 <button class="run-test-case-btn icon-btn" data-target=${i}><img src="${playIconUri}" alt="Copy" height="14"></button>
-                                
                             </div>
                             <pre>${inputs[i]}</pre>
                         </div>
