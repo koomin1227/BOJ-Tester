@@ -2,9 +2,12 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import { Problem, ProblemStats } from "../types";
 import { getCurrentOpenedFile, getProblemId } from '../utils/fileParser';
-import { parseProlem } from '../utils/problemParser';
+import { getProlem } from '../utils/problemParser';
 import { runAndPrintAllTestCase, runAndPrintTestCase } from '../utils/testCaseRunner';
 import { addTestCase, deleteTestCase, editTestCase } from '../utils/testCaseManager';
+
+export const problemSet: Record<number, Problem> = {};
+
 export class ProblemInfoPanel {
     public static currentPanel: ProblemInfoPanel | undefined;
     public static currentProblem: Problem | undefined = undefined;
@@ -29,7 +32,7 @@ export class ProblemInfoPanel {
             }  
 
             ProblemInfoPanel.currentOpendFile = getCurrentOpenedFile();      
-            ProblemInfoPanel.currentProblem = await parseProlem(problemId);
+            ProblemInfoPanel.currentProblem = await getProlem(problemId);
 
             const panel = this.createWebviewPanel();
             ProblemInfoPanel.currentPanel = new ProblemInfoPanel(panel, extensionUri);
@@ -57,7 +60,7 @@ export class ProblemInfoPanel {
 
             ProblemInfoPanel.currentOpendFile = getCurrentOpenedFile();      
             try {
-                ProblemInfoPanel.currentProblem = await parseProlem(problemId);
+                ProblemInfoPanel.currentProblem = await getProlem(problemId);
                 ProblemInfoPanel.currentPanel!._panel.webview.html = this.getWebviewContent(ProblemInfoPanel.currentProblem);
             } catch (error: any) {
                 if (error.response.status === 404) {
