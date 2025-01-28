@@ -149,7 +149,7 @@ export class ProblemInfoPanel {
                 <h2>테스트 케이스</h2>
                 <button class="run-all-test-cases-btn icon-btn"><img src="${playIconUri}" alt="Copy" height="14"></button>
             </div>
-            ${this.getTestCases(problem.inputs, problem.outputs)}
+            ${this.getTestCases(problem.inputs, problem.outputs, problem.DefaultTestCaseCount)}
             <button id="addTestCase" class="submit vs-style">테스트 케이스 추가</button>
             <br></br>
             <a href="https://www.acmicpc.net/submit/${problem.id}">
@@ -188,9 +188,11 @@ export class ProblemInfoPanel {
         `;
     }
 
-    private getTestCases(inputs: string[], outputs: string[]) {
+    private getTestCases(inputs: string[], outputs: string[], testCaseCount: number) {
 		const copyIconUri = this.getMediaFileUri('copy_icon.png');
         const playIconUri = this.getMediaFileUri('play_icon.png');
+        const deleteIconUri = this.getMediaFileUri('delete_icon.png');
+        const editIconUri = this.getMediaFileUri('edit_icon.png');
 
         let html = `<div id="testCaseContainer">`;
         for (let i = 0; i < inputs.length; i++) {
@@ -199,7 +201,10 @@ export class ProblemInfoPanel {
                             <div class="input-head">
                                 <h3>입력 ${i + 1}</h3>
                                 <button class="input-copy-btn icon-btn" data-target=${i}><img src="${copyIconUri}" alt="Copy" height="14"></button>
+                                <button class="edit-test-case-btn icon-btn" data-target=${i} ${i < testCaseCount? 'hidden' : ''}><img src="${editIconUri}" alt="Copy" height="14"></button>
+                                <button class="delete-test-case-btn icon-btn" data-target=${i} ${i < testCaseCount? 'hidden' : ''}><img src="${deleteIconUri}" alt="Copy" height="14"></button>
                                 <button class="run-test-case-btn icon-btn" data-target=${i}><img src="${playIconUri}" alt="Copy" height="14"></button>
+                                
                             </div>
                             <pre>${inputs[i]}</pre>
                         </div>
