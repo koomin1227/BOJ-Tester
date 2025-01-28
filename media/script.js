@@ -85,4 +85,82 @@ document.getElementById('addTestCase').addEventListener('click', () => {
     });
 });
 
+document.querySelectorAll('.edit-test-case-btn').forEach(button => {
+    button.addEventListener('click', function () {
+        const targetId = this.getAttribute('data-target');
+        const inputContainer = this.closest('.input');
+        const outputContainer = inputContainer.nextElementSibling;
+        const exampleContainer = this.closest('.example');
+
+        const inputPreElement = inputContainer.querySelector('pre');
+        const inputTextarea = document.createElement('textarea');
+        inputTextarea.className = 'test-case-textarea';
+        inputTextarea.rows = 4;
+        inputTextarea.value = inputPreElement.textContent;
+        inputPreElement.replaceWith(inputTextarea);
+
+        const outputPreElement = outputContainer.querySelector('pre');
+        const outputTextarea = document.createElement('textarea');
+        outputTextarea.className = 'test-case-textarea';
+        outputTextarea.rows = 4;
+        outputTextarea.value = outputPreElement.textContent;
+        outputPreElement.replaceWith(outputTextarea);
+
+        const confirmButton = document.createElement('button');
+        confirmButton.className = 'confirm-edit-btn vs-style';
+        confirmButton.textContent = '수정 확인';
+        confirmButton.setAttribute('data-target', targetId);
+
+        const cancelButton = document.createElement('button');
+        cancelButton.className = 'cancel-edit-btn vs-style second-button';
+        cancelButton.textContent = '취소';
+        cancelButton.setAttribute('data-target', targetId);
+
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'example';
+
+        buttonContainer.appendChild(confirmButton);
+        buttonContainer.appendChild(cancelButton);
+        exampleContainer.insertAdjacentElement('afterend', buttonContainer);
+
+        this.hidden = true;
+
+        confirmButton.addEventListener('click', function () {
+            vscode.postMessage({ 
+                command: 'editTestCase',
+                target: targetId,
+                input : inputTextarea.value.trim(),
+                output : outputTextarea.value.trim(),
+            });
+            const updatedInputValue = inputTextarea.value;
+            const newInputPreElement = document.createElement('pre');
+            newInputPreElement.textContent = updatedInputValue;
+            inputTextarea.replaceWith(newInputPreElement);
+
+            const updatedOutputValue = outputTextarea.value;
+            const newOutputPreElement = document.createElement('pre');
+            newOutputPreElement.textContent = updatedOutputValue;
+            outputTextarea.replaceWith(newOutputPreElement);
+
+            confirmButton.remove();
+            cancelButton.remove();
+            button.hidden = false;
+        });
+
+        cancelButton.addEventListener('click', function () {
+            const originalInputPreElement = document.createElement('pre');
+            originalInputPreElement.textContent = inputPreElement.textContent;
+            inputTextarea.replaceWith(originalInputPreElement);
+
+            const originalOutputPreElement = document.createElement('pre');
+            originalOutputPreElement.textContent = outputPreElement.textContent;
+            outputTextarea.replaceWith(originalOutputPreElement);
+
+            confirmButton.remove();
+            cancelButton.remove();
+            button.hidden = false;
+        });
+    });
+});
+
 

@@ -10,3 +10,10 @@ export function deleteTestCase(testCaseIndex: number, problem: Problem) {
         problem.inputs.splice(testCaseIndex, 1);
     }
 }
+
+export function editTestCase(input: string, output: string, testCaseIndex: number, problem: Problem) {
+    if (testCaseIndex >= problem.DefaultTestCaseCount) {
+        problem.inputs[testCaseIndex] = input;
+        problem.outputs[testCaseIndex] = output;
+    }
+}

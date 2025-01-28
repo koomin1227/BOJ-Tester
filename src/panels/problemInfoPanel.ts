@@ -4,7 +4,7 @@ import { Problem, ProblemStats } from "../types";
 import { getCurrentOpenedFile, getProblemId } from '../utils/fileParser';
 import { parseProlem } from '../utils/problemParser';
 import { runAndPrintAllTestCase, runAndPrintTestCase } from '../utils/testCaseRunner';
-import { addTestCase, deleteTestCase } from '../utils/testCaseManager';
+import { addTestCase, deleteTestCase, editTestCase } from '../utils/testCaseManager';
 export class ProblemInfoPanel {
     public static currentPanel: ProblemInfoPanel | undefined;
     public static currentProblem: Problem | undefined = undefined;
@@ -96,6 +96,8 @@ export class ProblemInfoPanel {
                 } else if (message.command === 'deleteTestCase') {
                     deleteTestCase(message.target, ProblemInfoPanel.currentProblem!);
                     ProblemInfoPanel.currentPanel!._panel.webview.html = this.getWebviewContent(ProblemInfoPanel.currentProblem!);
+                } else if (message.command === 'editTestCase') {
+                    editTestCase(message.input, message.output, message.target, ProblemInfoPanel.currentProblem!);
                 }
             },
             undefined,
