@@ -12,6 +12,7 @@ export interface Problem {
     description: string;
     inputDiscription: string;
     outputDescription: string;
+    DefaultTestCaseCount: number;
     inputs: string[];
     outputs: string[];
     problemStats: ProblemStats;

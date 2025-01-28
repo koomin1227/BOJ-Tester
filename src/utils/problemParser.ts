@@ -50,6 +50,7 @@ export async function parseProlem(id: number): Promise<Problem> {
         outputDescription,
         inputs,
         outputs,
+        DefaultTestCaseCount: inputs.length,
         problemStats,
     };
 }
