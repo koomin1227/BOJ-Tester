@@ -4,6 +4,7 @@ import { Problem, ProblemStats } from "../types";
 import { getCurrentOpenedFile, getProblemId } from '../utils/fileParser';
 import { parseProlem } from '../utils/problemParser';
 import { runAndPrintAllTestCase, runAndPrintTestCase } from '../utils/testCaseRunner';
+import { addTestCase } from '../utils/testCaseManager';
 export class ProblemInfoPanel {
     public static currentPanel: ProblemInfoPanel | undefined;
     public static currentProblem: Problem | undefined = undefined;
@@ -89,6 +90,9 @@ export class ProblemInfoPanel {
                     runAndPrintTestCase(ProblemInfoPanel.currentOpendFile!, ProblemInfoPanel.currentProblem!, Number(message.target));
                 } else if (message.command === 'runAllTestCases') {
                     runAndPrintAllTestCase(ProblemInfoPanel.currentOpendFile!, ProblemInfoPanel.currentProblem!);
+                } else if (message.command === 'addTestCase') {
+                    addTestCase(message.input, message.output, ProblemInfoPanel.currentProblem!);
+                    ProblemInfoPanel.currentPanel!._panel.webview.html = this.getWebviewContent(ProblemInfoPanel.currentProblem!);
                 }
             },
             undefined,

@@ -60,6 +60,24 @@ document.getElementById('addTestCase').addEventListener('click', () => {
     `;
 
     testCaseContainer.appendChild(testCaseForm);
+
+    document.getElementById(`confirmAddTestCase`).addEventListener('click', () => {
+        const input = document.getElementById(`inputField`).value;
+        const output = document.getElementById(`outputField`).value;
+
+
+        vscode.postMessage({ 
+            command: 'addTestCase',
+            input : input.trim(),
+            output : output.trim(),
+        });
+
+        testCaseForm.remove();
+    });
+
+    document.getElementById(`cancelAddTestCase`).addEventListener('click', () => {
+        testCaseForm.remove();
+    });
 });
 
 
