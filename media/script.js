@@ -40,6 +40,7 @@ document.querySelector('.run-all-test-cases-btn').addEventListener('click', () =
 
 document.getElementById('addTestCase').addEventListener('click', () => {
     const testCaseContainer = document.getElementById('testCaseContainer');
+    const addTestCaseButton = document.getElementById('addTestCase');
 
     const testCaseForm = document.createElement('div');
     testCaseForm.id = 'testCaseForm';
@@ -65,6 +66,7 @@ document.getElementById('addTestCase').addEventListener('click', () => {
     `;
 
     testCaseContainer.appendChild(testCaseForm);
+    addTestCaseButton.hidden = true;
 
     document.getElementById(`confirmAddTestCase`).addEventListener('click', () => {
         const input = document.getElementById(`inputField`).value;
@@ -82,6 +84,7 @@ document.getElementById('addTestCase').addEventListener('click', () => {
 
     document.getElementById(`cancelAddTestCase`).addEventListener('click', () => {
         testCaseForm.remove();
+        addTestCaseButton.hidden = false;
     });
 });
 
