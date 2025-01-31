@@ -2,8 +2,12 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import { Problem, ProblemStats } from "../types";
 import { getCurrentOpenedFile, getProblemId } from '../utils/fileParser';
-import { parseProlem } from '../utils/problemParser';
+import { getProlem } from '../utils/problemParser';
 import { runAndPrintAllTestCase, runAndPrintTestCase } from '../utils/testCaseRunner';
+import { addTestCase, deleteTestCase, editTestCase } from '../utils/testCaseManager';
+
+export const problemSet: Record<number, Problem> = {};
+
 export class ProblemInfoPanel {
     public static currentPanel: ProblemInfoPanel | undefined;
     public static currentProblem: Problem | undefined = undefined;
@@ -28,7 +32,7 @@ export class ProblemInfoPanel {
             }  
 
             ProblemInfoPanel.currentOpendFile = getCurrentOpenedFile();      
-            ProblemInfoPanel.currentProblem = await parseProlem(problemId);
+            ProblemInfoPanel.currentProblem = await getProlem(problemId);
 
             const panel = this.createWebviewPanel();
             ProblemInfoPanel.currentPanel = new ProblemInfoPanel(panel, extensionUri);
@@ -56,7 +60,7 @@ export class ProblemInfoPanel {
 
             ProblemInfoPanel.currentOpendFile = getCurrentOpenedFile();      
             try {
-                ProblemInfoPanel.currentProblem = await parseProlem(problemId);
+                ProblemInfoPanel.currentProblem = await getProlem(problemId);
                 ProblemInfoPanel.currentPanel!._panel.webview.html = this.getWebviewContent(ProblemInfoPanel.currentProblem);
             } catch (error: any) {
                 if (error.response.status === 404) {
@@ -89,6 +93,14 @@ export class ProblemInfoPanel {
                     runAndPrintTestCase(ProblemInfoPanel.currentOpendFile!, ProblemInfoPanel.currentProblem!, Number(message.target));
                 } else if (message.command === 'runAllTestCases') {
                     runAndPrintAllTestCase(ProblemInfoPanel.currentOpendFile!, ProblemInfoPanel.currentProblem!);
+                } else if (message.command === 'addTestCase') {
+                    addTestCase(message.input, message.output, ProblemInfoPanel.currentProblem!);
+                    ProblemInfoPanel.currentPanel!._panel.webview.html = this.getWebviewContent(ProblemInfoPanel.currentProblem!);
+                } else if (message.command === 'deleteTestCase') {
+                    deleteTestCase(message.target, ProblemInfoPanel.currentProblem!);
+                    ProblemInfoPanel.currentPanel!._panel.webview.html = this.getWebviewContent(ProblemInfoPanel.currentProblem!);
+                } else if (message.command === 'editTestCase') {
+                    editTestCase(message.input, message.output, message.target, ProblemInfoPanel.currentProblem!);
                 }
             },
             undefined,
@@ -125,7 +137,6 @@ export class ProblemInfoPanel {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>${problem.id}</title>
             <link href="${stylesMainUri}" rel="stylesheet">
-            
         </head>
         <body>
             <a href="https://www.acmicpc.net/problem/${problem.id}">
@@ -135,24 +146,32 @@ export class ProblemInfoPanel {
                 <button class="submit vs-style">제출하기</button>
             </a>
             ${this.getProblemStatsTable(problem.problemStats)}
-            <h2>문제</h2>
-            ${problem.description}
-            <h2>입력</h2>
-            ${problem.inputDiscription}
-            <h2>출력</h2>
-            ${problem.outputDescription}
+            ${this.getDescriptions(problem.descriptions)}
             <div class="input">
                 <h2>테스트 케이스</h2>
                 <button class="run-all-test-cases-btn icon-btn"><img src="${playIconUri}" alt="Copy" height="14"></button>
             </div>
-            ${this.getTestCases(problem.inputs, problem.outputs)}
+            ${this.getTestCases(problem.inputs, problem.outputs, problem.DefaultTestCaseCount)}
+            <button id="addTestCase" class="submit vs-style">테스트 케이스 추가</button>
+            <br></br>
             <a href="https://www.acmicpc.net/submit/${problem.id}">
                 <button class="submit vs-style">제출하기</button>
             </a>
             <script src="${scriptMainUri}"></script>
+            <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+            <script src="https://ddo7jzca0m2vt.cloudfront.net/js/mathjax.js"></script>
+            
             </body>
         </html>
         `;
+    }
+
+    getDescriptions(descriptions: string[]) {
+        let html = '';
+        descriptions.forEach((description) => {
+            html += description;
+        });
+        return html;
     }
 
     private getProblemStatsTable(problemStats: ProblemStats) {
@@ -182,17 +201,21 @@ export class ProblemInfoPanel {
         `;
     }
 
-    private getTestCases(inputs: string[], outputs: string[]) {
+    private getTestCases(inputs: string[], outputs: string[], testCaseCount: number) {
 		const copyIconUri = this.getMediaFileUri('copy_icon.png');
         const playIconUri = this.getMediaFileUri('play_icon.png');
+        const deleteIconUri = this.getMediaFileUri('delete_icon.png');
+        const editIconUri = this.getMediaFileUri('edit_icon.png');
 
-        let html = `<div>`;
+        let html = `<div id="testCaseContainer">`;
         for (let i = 0; i < inputs.length; i++) {
             html = html + `<div class="example">
                         <div class="input">
                             <div class="input-head">
                                 <h3>입력 ${i + 1}</h3>
                                 <button class="input-copy-btn icon-btn" data-target=${i}><img src="${copyIconUri}" alt="Copy" height="14"></button>
+                                <button class="edit-test-case-btn icon-btn" data-target=${i} ${i < testCaseCount? 'hidden' : ''}><img src="${editIconUri}" alt="Copy" height="14"></button>
+                                <button class="delete-test-case-btn icon-btn" data-target=${i}${i < testCaseCount? ' hidden' : ''}><img src="${deleteIconUri}" alt="Copy" height="14"></button>
                                 <button class="run-test-case-btn icon-btn" data-target=${i}><img src="${playIconUri}" alt="Copy" height="14"></button>
                             </div>
                             <pre>${inputs[i]}</pre>

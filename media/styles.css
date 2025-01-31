@@ -6,6 +6,8 @@
     --input-margin-horizontal: 0;
 }
 
+
+
 body {
     padding: 0 var(--container-padding);
     color: var(--vscode-foreground);
@@ -33,6 +35,28 @@ button.vs-style:hover {
 button.vs-style:focus {
     outline-color: var(--vscode-focusBorder);
 }
+
+button.second-button {
+    border: none;
+    padding: var(--input-padding-vertical) var(--input-padding-horizontal);
+    width: 100%;
+    text-align: center;
+    outline: 1px solid transparent;
+    outline-offset: 2px !important;
+    color: var(--vscode-button-foreground);
+    background: slategrey;
+}
+
+button.second-button:hover {
+    cursor: pointer;
+    background: rgb(74, 85, 96);
+}
+
+button.second-button:focus {
+    outline-color: rgb(74, 85, 96);
+}
+
+second-button
 
 button.secondary {
     color: var(--vscode-button-secondaryForeground);
@@ -131,19 +155,31 @@ p {
     line-height: 2;
 }
 
-.problem-stats-table {
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 10px 0;
+    text-align: left;
+  }
+  
+th, td {
+    border: 1px solid #ddd;
+    padding: 5px;
+  }
+
+table.problem-stats-table {
     border-collapse: collapse;
     margin: 25px 0;
     width: 100%;
     text-align: center;
 }
 
-.problem-stats-table thead tr {
+table.problem-stats-table thead tr {
     font-weight: bold;
     border-bottom: 1px solid rgb(134, 134, 134)
 }
 
-.problem-stats-table th, .problem-stats-table td {
+table.problem-stats-table th, table.problem-stats-table td {
     padding: 12px 15px;
 }
 
@@ -170,3 +206,15 @@ p {
     gap: 3px;
     align-items: flex-end;
 }
+
+.test-case-textarea {
+    padding: 10px;
+    background-color:rgb(53, 53, 53);
+    color: white;
+    width: 100%;
+    resize: none;
+    box-sizing: border-box;
+}
+
+
+  
