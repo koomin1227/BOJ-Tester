@@ -119,7 +119,7 @@ async function runCode(filePath: string, inputData: string): Promise<string> {
                     output
                         .split('\n')
                         .map(line => line.trim())
-                        .join('\n')
+                        .join('\n').trim()
                 );
             } else {
                 reject(new Error(error || `Process exited with code ${code}`));
