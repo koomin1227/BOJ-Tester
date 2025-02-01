@@ -69,6 +69,7 @@ function summarizeTestResults(testResults: TestCaseResult[]): string {
 export async function runTestCase(filePath: string, inputData: string, outputData: string): Promise<TestCaseResult> {
     try {
         const output = await runCode(filePath, inputData);
+
         const testCaseResult: TestCaseResult = {
             isSuccess: false,
             isError: false,
@@ -114,7 +115,12 @@ async function runCode(filePath: string, inputData: string): Promise<string> {
         process.on('close', (code) => {
             clearTimeout(timeout);
             if (code === 0) {
-                resolve(output.trim());
+                resolve(
+                    output
+                        .split('\n')
+                        .map(line => line.trim())
+                        .join('\n')
+                );
             } else {
                 reject(new Error(error || `Process exited with code ${code}`));
             }
