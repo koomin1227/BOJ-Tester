@@ -152,7 +152,7 @@ export class ProblemInfoPanel {
                 <button class="run-all-test-cases-btn icon-btn"><img src="${playIconUri}" alt="Copy" height="14"></button>
             </div>
             ${this.getTestCases(problem.inputs, problem.outputs, problem.DefaultTestCaseCount)}
-            <button id="addTestCase" class="submit vs-style">테스트 케이스 추가</button>
+            <button id="addTestCase" class="vs-style">테스트 케이스 추가</button>
             <br></br>
             <a href="https://www.acmicpc.net/submit/${problem.id}">
                 <button class="submit vs-style">제출하기</button>
