@@ -2,7 +2,7 @@
   "name": "boj-tester",
   "publisher": "koomin1227",
   "displayName": "BOJ Tester",
-  "description": "VS Code 안에서 문제보기, 테스트 케이스 실행등 다양한 기능을 제공",
+  "description": "VS Code 안에서 백준 문제보기, 테스트 케이스 실행등 다양한 기능을 제공",
   "icon": "media/default_icon.png",
   "version": "1.0.3",
   "engines": {
