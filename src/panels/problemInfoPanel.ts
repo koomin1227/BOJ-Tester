@@ -152,11 +152,12 @@ export class ProblemInfoPanel {
                 <button class="run-all-test-cases-btn icon-btn"><img src="${playIconUri}" alt="Copy" height="14"></button>
             </div>
             ${this.getTestCases(problem.inputs, problem.outputs, problem.DefaultTestCaseCount)}
-            <button id="addTestCase" class="submit vs-style">테스트 케이스 추가</button>
+            <button id="addTestCase" class="vs-style">테스트 케이스 추가</button>
             <br></br>
             <a href="https://www.acmicpc.net/submit/${problem.id}">
                 <button class="submit vs-style">제출하기</button>
             </a>
+
             <script src="${scriptMainUri}"></script>
             <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
             <script src="https://ddo7jzca0m2vt.cloudfront.net/js/mathjax.js"></script>
@@ -218,14 +219,14 @@ export class ProblemInfoPanel {
                                 <button class="delete-test-case-btn icon-btn" data-target=${i}${i < testCaseCount? ' hidden' : ''}><img src="${deleteIconUri}" alt="Copy" height="14"></button>
                                 <button class="run-test-case-btn icon-btn" data-target=${i}><img src="${playIconUri}" alt="Copy" height="14"></button>
                             </div>
-                            <pre>${inputs[i]}</pre>
+                            <pre>${this.escapeHtml(inputs[i])}</pre>
                         </div>
                         <div class="output">
                             <div class="input-head">
                                 <h3>출력 ${i + 1}</h3>
                                 <button class="output-copy-btn icon-btn" data-target=${i} title="복사"><img src="${copyIconUri}" alt="Copy" height="14"></button>
                             </div>
-                            <pre>${outputs[i]}</pre>
+                            <pre>${this.escapeHtml(outputs[i])}</pre>
                         </div>
                     </div>
                     `;
@@ -237,5 +238,14 @@ export class ProblemInfoPanel {
         const webview = this._panel.webview;
         const filePath = vscode.Uri.joinPath(this._extensionUri, 'media', fileName);
 		return webview.asWebviewUri(filePath);
+    }
+
+    private escapeHtml(input: string) {
+        return input
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
     }
 }
