@@ -171,26 +171,13 @@ function getProcessForRunning(filePath: string) {
 
 function compileAndRunCpp(filePath: string) {
     const outputFile = filePath.replace(/\.cpp$/, '');
-    return childProcess.spawn('g++', [filePath, '-o', outputFile])
-        .on('close', (code) => {
-            if (code === 0) {
-                childProcess.spawn(outputFile);
-            } else {
-                throw new Error('C++ compilation failed.');
-            }
-        });
+    return childProcess.spawn('sh', ['-c', `g++ ${filePath} -o ${outputFile} && ${outputFile} && rm ${outputFile}`]);
 }
+
 
 function compileAndRunC(filePath: string) {
     const outputFile = filePath.replace(/\.c$/, '');
-    return childProcess.spawn('gcc', [filePath, '-o', outputFile])
-        .on('close', (code) => {
-            if (code === 0) {
-                childProcess.spawn(outputFile);
-            } else {
-                throw new Error('C compilation failed.');
-            }
-        });
+    return childProcess.spawn('sh', ['-c', `gcc ${filePath} -o ${outputFile} && ${outputFile} && rm ${outputFile}`]);
 }
 
 export function printResult(result: TestCaseResult, testCaseNumber: number) {
