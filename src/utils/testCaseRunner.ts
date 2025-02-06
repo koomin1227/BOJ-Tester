@@ -82,6 +82,14 @@ export async function runTestCase(filePath: string, inputData: string, outputDat
         }
         return testCaseResult;
     } catch (error: any) {
+        const extension = filePath.split('.').pop()?.toLowerCase();
+        
+        if (extension === 'cpp') {
+            childProcess.spawn('rm', [filePath.replace(/\.cpp$/, '')]);
+        } else if (extension === 'c') {
+            childProcess.spawn('rm', [filePath.replace(/\.c$/, '')]);
+        }
+
         return {
             isSuccess: false,
             isError: true,
@@ -171,13 +179,15 @@ function getProcessForRunning(filePath: string) {
 
 function compileAndRunCpp(filePath: string) {
     const outputFile = filePath.replace(/\.cpp$/, '');
-    return childProcess.spawn('sh', ['-c', `g++ ${filePath} -o ${outputFile} && ${outputFile} && rm ${outputFile}`]);
+    return childProcess.spawn('sh', ['-c', `g++ ${filePath} -o ${outputFile} && ${outputFile} && rm ${outputFile}`])
+        .on('close', () => childProcess.spawn('rm', [outputFile]));;
 }
 
 
 function compileAndRunC(filePath: string) {
     const outputFile = filePath.replace(/\.c$/, '');
-    return childProcess.spawn('sh', ['-c', `gcc ${filePath} -o ${outputFile} && ${outputFile} && rm ${outputFile}`]);
+    return childProcess.spawn('sh', ['-c', `gcc ${filePath} -o ${outputFile} && ${outputFile} && rm ${outputFile}`])
+        .on('close', () => childProcess.spawn('rm', [outputFile]));
 }
 
 export function printResult(result: TestCaseResult, testCaseNumber: number) {
