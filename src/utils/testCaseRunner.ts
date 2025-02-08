@@ -93,8 +93,8 @@ export async function runTestCase(filePath: string, inputData: string, outputDat
 }
 
 async function runCode(filePath: string, inputData: string): Promise<string> {
-	return new Promise((resolve, reject) => {
-		const process = getProcessForRunning(filePath);
+	return new Promise(async (resolve, reject) => {
+		const process = await getProcessForRunning(filePath);
 
 		let output = '';
 		let error = '';
@@ -131,7 +131,7 @@ async function runCode(filePath: string, inputData: string): Promise<string> {
 	});
 }
 
-function getProcessForRunning(filePath: string) {
+async function getProcessForRunning(filePath: string) {
     const extension = filePath.split('.').pop()?.toLowerCase();
 
     switch (extension) {
@@ -146,7 +146,7 @@ function getProcessForRunning(filePath: string) {
             return childProcess.spawn('node', [filePath]);
 
         case 'cpp':
-            return compileAndRunCpp(filePath);
+            return compileAndRunC(filePath, 'cpp');
 
         case 'c':
             return compileAndRunC(filePath);
@@ -169,28 +169,25 @@ function getProcessForRunning(filePath: string) {
     }
 }
 
-function compileAndRunCpp(filePath: string) {
-    const outputFile = filePath.replace(/\.cpp$/, '');
-    return childProcess.spawn('g++', [filePath, '-o', outputFile])
-        .on('close', (code) => {
-            if (code === 0) {
-                childProcess.spawn(outputFile);
-            } else {
-                throw new Error('C++ compilation failed.');
-            }
-        });
-}
+async function compileAndRunC(filePath: string, type: 'c' | 'cpp' = 'c') {
+    const outputFile = filePath.replace(new RegExp(`\.${type}$`), '');
 
-function compileAndRunC(filePath: string) {
-    const outputFile = filePath.replace(/\.c$/, '');
-    return childProcess.spawn('gcc', [filePath, '-o', outputFile])
+    const isCompiled = await new Promise((resolve) => {
+        childProcess.spawn('g++', [filePath, '-o', outputFile])
         .on('close', (code) => {
             if (code === 0) {
-                childProcess.spawn(outputFile);
+                resolve(true);
             } else {
-                throw new Error('C compilation failed.');
+                resolve(false);
             }
         });
+    });
+
+    if(!isCompiled) {
+        throw new Error('C++ compilation failed.');
+    }
+
+    return childProcess.spawn(outputFile);
 }
 
 export function printResult(result: TestCaseResult, testCaseNumber: number) {
