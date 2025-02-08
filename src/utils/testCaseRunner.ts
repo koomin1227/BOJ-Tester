@@ -116,7 +116,11 @@ async function runCode(filePath: string, inputData: string): Promise<string> {
             clearTimeout(timeout);
             if (code === 0) {
                 resolve(
-                    output.trim()
+                    output
+                        .split('\n')
+                        .map(line => line.trimEnd())
+                        .join('\n')
+                        .trim()
                 );
             } else {
                 reject(new Error(error || `Process exited with code ${code}`));
