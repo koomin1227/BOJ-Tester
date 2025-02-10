@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import * as childProcess from 'child_process';
+import { childProcess } from './process';
 import { Problem } from '../types';
 import path from 'path';
 const outputChannel = vscode.window.createOutputChannel('Test Results');
