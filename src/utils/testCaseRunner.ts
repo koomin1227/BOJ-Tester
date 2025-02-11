@@ -145,7 +145,7 @@ function getProcessForRunning(filePath: string) {
 
     switch (extension) {
         case 'py':
-            return childProcess.spawn('python3', [filePath]);
+            return childProcess.spawn(process.platform === 'win32' ? 'python' : 'python3', [filePath]);
 
         case 'java':
             const dirName = path.dirname(filePath);
@@ -159,9 +159,6 @@ function getProcessForRunning(filePath: string) {
 
         case 'c':
             return compileAndRunC(filePath);
-
-        case 'cs':
-            return childProcess.spawn('dotnet', ['run', '--project', filePath]);
 
         case 'kt':
             return childProcess.spawn('kotlinc', [filePath, '-include-runtime', '-d', 'Program.jar'])
