@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import path from 'path';
 import { promptForProblemId } from '../utils/fileParser';
 import { getDefaultLanguage } from './configuration';
-import { FILE_TEMPLATES } from './templates';
+import { FILE_TEMPLATES } from './fileTemplates';
 
 export async function createProblemFile() {
     const workSpaceRootFolder = getWorkSpaceRootFolder();
