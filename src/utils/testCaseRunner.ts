@@ -160,9 +160,6 @@ function getProcessForRunning(filePath: string) {
         case 'c':
             return compileAndRunC(filePath);
 
-        case 'cs':
-            return childProcess.spawn('dotnet', ['run', '--project', filePath]);
-
         case 'kt':
             return childProcess.spawn('kotlinc', [filePath, '-include-runtime', '-d', 'Program.jar'])
                 .on('close', () => childProcess.spawn('java', ['-jar', 'Program.jar']));
