@@ -78,5 +78,10 @@ async function fetchProblemHtml(id: number) {
             "User-Agent": USER_AGENT
         }
     });
+
+    if (response.status === 202) {
+        throw new Error('Failed to fetch problem');
+    }
+
     return response.data;
 }

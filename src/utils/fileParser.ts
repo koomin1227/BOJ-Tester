@@ -1,3 +1,4 @@
+import path from 'path';
 import * as vscode from 'vscode';
 
 export function getCurrentOpenedFile() {
@@ -11,8 +12,8 @@ export function getCurrentOpenedFile() {
 }
 
 export function extractFileName(filePath: string) {
-    const fileNameWithExtension = filePath.split("/").pop() || "";
-    const fileName = fileNameWithExtension.split(".").slice(0, -1).join(".");
+    const fileNameWithExtension = path.basename(filePath); // 경로에서 파일명 추출
+    const fileName = fileNameWithExtension.split(".").slice(0, -1).join("."); // 확장자 제거
     return fileName;
 }
 

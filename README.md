@@ -14,7 +14,7 @@ BOJ Tester는 [백준 온라인 저지(BOJ)](https://www.acmicpc.net)의 문제�
 - 작성한 코드를 파일 확장자에 맞는 언어로 실행하여 테스트할 수 있습니다.
 - 단일 테스트 케이스 실행 및 전체 테스트 케이스 실행 기능을 제공합니다.
 #### 지원 언어
-`python`, `java`, `java script`, `c++`, `c`, `c#`, `kotlin`, `swift`
+`Python`, `Java`, `JavaScript`, `C++`, `C`, `Kotlin`, `Swift`, `Go`
 
 ### 3. 테스트 케이스 추가하기
 - 문제에서 기본으로 제공하는 테스트 케이스 외에 다양한 테스트 케이스를 임의로 추가할 수 있습니다.
