@@ -126,6 +126,7 @@ export class ProblemInfoPanel {
     private getWebviewContent(problem: Problem): string {
 		const stylesMainUri = this.getMediaFileUri('styles.css');
         const scriptMainUri = this.getMediaFileUri('script.js');
+        const scriptMathJaxUri = this.getMediaFileUri('mathjax.js');
         const playIconUri = this.getMediaFileUri('play_icon.png');
         
         return `
@@ -160,8 +161,7 @@ export class ProblemInfoPanel {
 
             <script src="${scriptMainUri}"></script>
             <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-            <script src="https://ddo7jzca0m2vt.cloudfront.net/js/mathjax.js"></script>
-            
+            <script src="${scriptMathJaxUri}"></script>
             </body>
         </html>
         `;
