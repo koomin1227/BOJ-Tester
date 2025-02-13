@@ -37,7 +37,7 @@ export class ProblemInfoPanel {
             const panel = this.createWebviewPanel();
             ProblemInfoPanel.currentPanel = new ProblemInfoPanel(panel, extensionUri);
         } catch (error: any) {
-            if (error.response.status === 404) {
+            if (error.response?.status === 404) {
                 vscode.window.showWarningMessage('없는 문제 입니다. 문제 번호를 다시 확인해주세요.');
             } else {
                 vscode.window.showWarningMessage('오류가 생겼습니다. 잠시후 다시 시도 해주세요.');
@@ -63,7 +63,7 @@ export class ProblemInfoPanel {
                 ProblemInfoPanel.currentProblem = await getProlem(problemId);
                 ProblemInfoPanel.currentPanel!._panel.webview.html = this.getWebviewContent(ProblemInfoPanel.currentProblem);
             } catch (error: any) {
-                if (error.response.status === 404) {
+                if (error.response?.status === 404) {
                     vscode.window.showWarningMessage('없는 문제 입니다. 문제 번호를 다시 확인해주세요.');
                 } else {
                     vscode.window.showWarningMessage('오류가 생겼습니다. 잠시후 다시 시도 해주세요.');
