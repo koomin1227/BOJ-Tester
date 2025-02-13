@@ -25,7 +25,6 @@ async function parseProblem(id: number): Promise<Problem> {
     const title = $("#problem_title").text().trim();
 
     // 문제 설명
-
     const descriptions: string[] = [];
     $('.problem-section').each((index, element) => {
         const problemText = $(element).find('.problem-text').text().trim();

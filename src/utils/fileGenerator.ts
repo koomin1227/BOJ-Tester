@@ -43,7 +43,7 @@ function getTemplateContent(fileName: string) {
     return extension && FILE_TEMPLATES[extension] ? FILE_TEMPLATES[extension] : '';
 }
 
-function getWorkSpaceRootFolder(): string | null {
+export function getWorkSpaceRootFolder(): string | null {
     const workspaceFolders = vscode.workspace.workspaceFolders;
     if (workspaceFolders) {
         return workspaceFolders[0].uri.path;
