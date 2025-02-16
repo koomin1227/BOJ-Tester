@@ -8,6 +8,11 @@
   "engines": {
     "vscode": "^1.95.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/koomin1227/BOJ-Tester"
+  },
+  "qna": "https://github.com/koomin1227/BOJ-Tester/issues",
   "categories": [
     "Other"
   ],
