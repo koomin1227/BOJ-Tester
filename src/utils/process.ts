@@ -1,4 +1,5 @@
-import { execSync, spawn } from 'child_process';
+import { execSync, spawn, SpawnOptionsWithoutStdio } from 'child_process';
+import { getWorkSpaceRootFolder } from './fileGenerator';
 
 class ChildProcess {
     private env: NodeJS.ProcessEnv = process.env;
@@ -16,9 +17,16 @@ class ChildProcess {
         }
     }
 
-    spawn(command: string, args: string[] = []){
+    spawn(command: string, args: string[] = [], options?: SpawnOptionsWithoutStdio){
+        const workSpaceRootFolder = getWorkSpaceRootFolder();
+        if (!workSpaceRootFolder) {
+            throw new Error('Fail to load work space root folder');
+        }
+
         return spawn(command, args, {
-            env: this.env
+            ...options,
+            env: this.env,
+            cwd: workSpaceRootFolder
         });
     }
 }

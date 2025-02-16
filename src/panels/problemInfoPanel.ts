@@ -37,7 +37,7 @@ export class ProblemInfoPanel {
             const panel = this.createWebviewPanel();
             ProblemInfoPanel.currentPanel = new ProblemInfoPanel(panel, extensionUri);
         } catch (error: any) {
-            if (error.response.status === 404) {
+            if (error.response?.status === 404) {
                 vscode.window.showWarningMessage('없는 문제 입니다. 문제 번호를 다시 확인해주세요.');
             } else {
                 vscode.window.showWarningMessage('오류가 생겼습니다. 잠시후 다시 시도 해주세요.');
@@ -63,7 +63,7 @@ export class ProblemInfoPanel {
                 ProblemInfoPanel.currentProblem = await getProlem(problemId);
                 ProblemInfoPanel.currentPanel!._panel.webview.html = this.getWebviewContent(ProblemInfoPanel.currentProblem);
             } catch (error: any) {
-                if (error.response.status === 404) {
+                if (error.response?.status === 404) {
                     vscode.window.showWarningMessage('없는 문제 입니다. 문제 번호를 다시 확인해주세요.');
                 } else {
                     vscode.window.showWarningMessage('오류가 생겼습니다. 잠시후 다시 시도 해주세요.');
@@ -126,6 +126,7 @@ export class ProblemInfoPanel {
     private getWebviewContent(problem: Problem): string {
 		const stylesMainUri = this.getMediaFileUri('styles.css');
         const scriptMainUri = this.getMediaFileUri('script.js');
+        const scriptMathJaxUri = this.getMediaFileUri('mathjax.js');
         const playIconUri = this.getMediaFileUri('play_icon.png');
         
         return `
@@ -160,8 +161,7 @@ export class ProblemInfoPanel {
 
             <script src="${scriptMainUri}"></script>
             <script id="MathJax-script" async="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-            <script src="https://ddo7jzca0m2vt.cloudfront.net/js/mathjax.js"></script>
-            
+            <script src="${scriptMathJaxUri}"></script>
             </body>
         </html>
         `;
