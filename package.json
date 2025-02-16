@@ -4,9 +4,9 @@
   "displayName": "BOJ Tester",
   "description": "VS Code 안에서 백준 문제보기, 테스트 케이스 실행등 다양한 기능을 제공",
   "icon": "media/default_icon.png",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "engines": {
-    "vscode": "^1.96.0"
+    "vscode": "^1.95.0"
   },
   "categories": [
     "Other"
@@ -79,7 +79,7 @@
   "devDependencies": {
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
-    "@types/vscode": "^1.96.0",
+    "@types/vscode": "^1.95.0",
     "@typescript-eslint/eslint-plugin": "^8.17.0",
     "@typescript-eslint/parser": "^8.17.0",
     "@vscode/test-cli": "^0.0.10",
