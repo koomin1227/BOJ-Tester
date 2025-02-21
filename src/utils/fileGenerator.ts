@@ -46,7 +46,7 @@ function getTemplateContent(fileName: string) {
 export function getWorkSpaceRootFolder(): string | null {
     const workspaceFolders = vscode.workspace.workspaceFolders;
     if (workspaceFolders) {
-        return workspaceFolders[0].uri.path;
+        return workspaceFolders[0].uri.fsPath;
     } else {
         vscode.window.showErrorMessage('작업 영역이 없습니다. 폴더를 열고 문제를 생성해주세요.');
         return null;
