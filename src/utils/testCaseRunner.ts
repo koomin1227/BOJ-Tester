@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { childProcess } from './process';
 import { Problem } from '../types';
 import path from 'path';
+import { execSync } from 'child_process';
 const outputChannel = vscode.window.createOutputChannel('Test Results');
 
 interface TestCaseResult {
@@ -176,16 +177,19 @@ function getProcessForRunning(filePath: string) {
 }
 
 function compileAndRunCpp(filePath: string) {
-    const outputFile = filePath.replace(/\.cpp$/, '');
-    return childProcess.spawn('sh', ['-c', `g++ ${filePath} -o ${outputFile} && ${outputFile} && rm ${outputFile}`])
-        .on('close', () => childProcess.spawn('rm', [outputFile]));;
+    return compileAndRun(filePath, 'g++');
 }
 
 
 function compileAndRunC(filePath: string) {
-    const outputFile = filePath.replace(/\.c$/, '');
-    return childProcess.spawn('sh', ['-c', `gcc ${filePath} -o ${outputFile} && ${outputFile} && rm ${outputFile}`])
-        .on('close', () => childProcess.spawn('rm', [outputFile]));
+    return compileAndRun(filePath, 'gcc');
+}
+
+function compileAndRun(filePath: string, compiler: 'gcc' | 'g++') {
+    const outputFile = filePath.replace(/\.(c|cpp)$/, '');
+    execSync(`${compiler} "${filePath}" -o "${outputFile}"`);
+    return childProcess.spawn(`${outputFile}`)
+        .on('close', () => childProcess.spawn(process.platform === 'win32' ? 'del' : 'rm', [outputFile]));
 }
 
 export function printResult(result: TestCaseResult, testCaseNumber: number) {

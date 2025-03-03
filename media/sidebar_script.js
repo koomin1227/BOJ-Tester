@@ -1,6 +1,6 @@
 const vscode = acquireVsCodeApi();
 
-const toggleButton = document.getElementById("toggleAutocomplete");
+const toggleButton = document.getElementById("toggleIdeFeature");
 
 vscode.postMessage({ command: 'requestData' });
 window.addEventListener('message', (event) => {
@@ -11,10 +11,10 @@ window.addEventListener('message', (event) => {
 });
 
 toggleButton.addEventListener("click", function() {
-    if (toggleButton.innerText === "자동완성 켜기") {
-        toggleButton.innerText = "자동완성 끄기";
+    if (toggleButton.innerText === "IDE 기능 켜기") {
+        toggleButton.innerText = "IDE 기능 끄기";
     } else {
-        toggleButton.innerText = "자동완성 켜기";
+        toggleButton.innerText = "IDE 기능 켜기";
     }
 });
 
@@ -30,8 +30,8 @@ document.getElementById('createProblem').addEventListener('click', () => {
     });
 });
 
-document.getElementById('toggleAutocomplete').addEventListener('click', () => {
+document.getElementById('toggleIdeFeature').addEventListener('click', () => {
     vscode.postMessage({
-        command: 'toggleAutocomplete'
+        command: 'toggleIdeFeature'
     });
 });
