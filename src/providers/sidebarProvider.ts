@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { getFeatureStatus } from "../commands/toggleAutocomplete";
+import { getFeatureStatus } from "../commands/toggleIdeFeature";
 
 export class SidebarProvider implements vscode.WebviewViewProvider {
     _view?: vscode.WebviewView;
@@ -32,8 +32,8 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
             case "createProblem":
                 vscode.commands.executeCommand("boj-tester.createProblem");
                 break;
-            case "toggleAutocomplete":
-                vscode.commands.executeCommand("boj-tester.toggleAutocomplete");
+            case "toggleIdeFeature":
+                vscode.commands.executeCommand("boj-tester.toggleIdeFeature");
                 break;
             case "requestData":
                 panel.webview.postMessage({
@@ -66,7 +66,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
         <button id="createProblem">문제 파일 생성</button>
         <div style="height: 20px;"></div>
         IDE 제어
-        <button id="toggleAutocomplete"></button>
+        <button id="toggleIdeFeature"></button>
 
         <script src="${scriptMainUri}"></script>
       </body>
@@ -81,9 +81,9 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
     private async getButtonStatus() {
         const isFeatureEnabled = await getFeatureStatus();
         if (isFeatureEnabled) {
-            return '자동완성 끄기';
+            return 'IDE 기능 끄기';
         } else {
-            return '자동완성 켜기';
+            return 'IDE 기능 켜기';
         }
     }
 }

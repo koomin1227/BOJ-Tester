@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-export async function toggleAutocomplete() {
+export async function toggleIdeFeature() {
     const editorConfig = vscode.workspace.getConfiguration('editor');
     const problemsConfig = vscode.workspace.getConfiguration('problems');
 
@@ -14,7 +14,7 @@ export async function toggleAutocomplete() {
         await editorConfig.update('inlineSuggest.enabled', false, vscode.ConfigurationTarget.Global);
         await problemsConfig.update('visibility', false, vscode.ConfigurationTarget.Global);
 
-        vscode.window.showInformationMessage('자동완성 기능이 꺼졌습니다.');
+        vscode.window.showInformationMessage('IDE 기능이 꺼졌습니다.');
     } else {
         await editorConfig.update('quickSuggestions', { other: true, comments: true, strings: true }, vscode.ConfigurationTarget.Global);
         await editorConfig.update('suggestOnTriggerCharacters', true, vscode.ConfigurationTarget.Global);
@@ -24,7 +24,7 @@ export async function toggleAutocomplete() {
         await editorConfig.update('inlineSuggest.enabled', true, vscode.ConfigurationTarget.Global);
         await problemsConfig.update('visibility', true, vscode.ConfigurationTarget.Global);
 
-        vscode.window.showInformationMessage('자동완성 기능이 켜졌습니다.');
+        vscode.window.showInformationMessage('IDE 기능이 켜졌습니다.');
     }
 
     isFeatureEnabled = !isFeatureEnabled;
