@@ -10,7 +10,16 @@ export async function checkSettingsAndOpenIfMissing(context: vscode.ExtensionCon
     }
 }
 
-export function getDefaultLanguage() {
+export function getDefaultLanguage(): string | undefined {
     const config = vscode.workspace.getConfiguration('BOJ-Tester');
-    return config.get('defaultLanguage');
+    const defaultLanguage = config.get<string>('defaultLanguage');
+    if (!defaultLanguage) {
+        vscode.window.showWarningMessage('기본 언어가 설정되지 않았습니다. 설정창에서 기본 언어를 설정해주세요.');
+    }
+    return defaultLanguage;
+}
+
+export function getDefaultPath(): string | undefined {
+    const config = vscode.workspace.getConfiguration('BOJ-Tester');
+    return config.get<string>('defaultPath');
 }

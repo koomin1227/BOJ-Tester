@@ -43,17 +43,19 @@ button.second-button {
     text-align: center;
     outline: 1px solid transparent;
     outline-offset: 2px !important;
-    color: var(--vscode-button-foreground);
-    background: slategrey;
+    color: var(--vscode-button-secondaryForeground);
+    background: var(--vscode-button-secondaryBackground);
+    ;
 }
 
 button.second-button:hover {
     cursor: pointer;
-    background: rgb(74, 85, 96);
+    background: var(--vscode-button-secondaryHoverBackground);
+    ;
 }
 
 button.second-button:focus {
-    outline-color: rgb(74, 85, 96);
+    outline-color: var(--vscode-button-secondaryHoverBackground);
 }
 
 second-button
@@ -80,7 +82,7 @@ button.icon-btn {
 
 button.icon-btn:hover {
     cursor: pointer;
-    background: rgb(45, 46, 46);
+    background: var(--vscode-editorWidget-background);
 }
 
 button.icon-btn:focus {
@@ -106,7 +108,7 @@ h1::after {
     left: 0;
     width: 100vw;
     height: 1px;
-    background-color:rgb(87, 87, 87);
+    background-color:var(--vscode-tab-inactiveBackground);
 }
 
 h2 {
@@ -114,7 +116,7 @@ h2 {
     padding-bottom: 10px;
     margin-bottom: 20px;
     display: inline-block;
-    border-bottom: 1px solid #0076C0;
+    border-bottom: 1px solid var(--vscode-button-background);
 }
 
 h2::after {
@@ -124,7 +126,7 @@ h2::after {
     left: 0;
     width: 100vw;
     height: 1px;
-    background-color:rgb(87, 87, 87);
+    background-color:var(--vscode-tab-inactiveBackground);
 }
 
 h3 {
@@ -132,7 +134,7 @@ h3 {
     padding-bottom: 10px;
     margin-bottom: 20px;
     display: inline-block;
-    border-bottom: 1px solid #0076C0;
+    border-bottom: 1px solid var(--vscode-button-background);
 }
 
 h3::after {
@@ -142,12 +144,12 @@ h3::after {
     left: 0;
     width: 100vw;
     height: 1px;
-    background-color:rgb(87, 87, 87);
+    background-color:var(--vscode-tab-inactiveBackground);
 }
 
 pre {
     padding: 10px;
-    background-color:rgb(53, 53, 53);
+    background-color:var(--vscode-tab-inactiveBackground);
 }
 
 p {
@@ -163,7 +165,7 @@ table {
   }
   
 th, td {
-    border: 1px solid #ddd;
+    border: 1px solid var(--vscode-foreground);
     padding: 5px;
   }
 
@@ -176,7 +178,6 @@ table.problem-stats-table {
 
 table.problem-stats-table thead tr {
     font-weight: bold;
-    border-bottom: 1px solid rgb(134, 134, 134)
 }
 
 table.problem-stats-table th, table.problem-stats-table td {
@@ -209,8 +210,8 @@ table.problem-stats-table th, table.problem-stats-table td {
 
 .test-case-textarea {
     padding: 10px;
-    background-color:rgb(53, 53, 53);
-    color: white;
+    background-color:var(--vscode-tab-inactiveBackground);
+    color: var(--vscode-foreground);
     width: 100%;
     resize: none;
     box-sizing: border-box;
