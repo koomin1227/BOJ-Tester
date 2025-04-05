@@ -1,12 +1,12 @@
 import * as vscode from 'vscode';
 import path from 'path';
 import { promptForProblemId } from '../utils/fileParser';
-import { getDefaultLanguage } from './configuration';
+import { getDefaultLanguage, getDefaultPath } from './configuration';
 import { FILE_TEMPLATES } from './fileTemplates';
 
 export async function createProblemFile() {
-    const workSpaceRootFolder = getWorkSpaceRootFolder();
-    if (workSpaceRootFolder === null) {
+    const path = getFilePath();
+    if (path === null) {
         return null;
     }
 
@@ -15,11 +15,15 @@ export async function createProblemFile() {
         return null;
     }
     const extension = getDefaultLanguage();
-    const filePath = await createFile(workSpaceRootFolder, `${problemId}.${extension}`);
-    if (filePath === null) {
+    if (!extension) {
         return null;
     }
-    return filePath;
+
+    const createdFilePath = await createFile(path, `${problemId}.${extension}`);
+    if (createdFilePath === null) {
+        return null;
+    }
+    return createdFilePath;
 }
 
 async function createFile(rootUri: string, fileName: string) {
@@ -43,12 +47,16 @@ function getTemplateContent(fileName: string) {
     return extension && FILE_TEMPLATES[extension] ? FILE_TEMPLATES[extension] : '';
 }
 
-export function getWorkSpaceRootFolder(): string | null {
+function getFilePath(): string | null {
+    const defaultPath = getDefaultPath();
+    if (defaultPath) {
+        return defaultPath;
+    }
     const workspaceFolders = vscode.workspace.workspaceFolders;
     if (workspaceFolders) {
         return workspaceFolders[0].uri.fsPath;
     } else {
-        vscode.window.showErrorMessage('작업 영역이 없습니다. 폴더를 열고 문제를 생성해주세요.');
+        vscode.window.showErrorMessage('작업 영역이 없습니다. 폴더를 열고 문제를 생성해주세요. 혹은 설정창에서 기본 폴더를 설정해주세요.');
         return null;
     }
 }
