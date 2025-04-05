@@ -4,7 +4,7 @@
   "displayName": "BOJ Tester",
   "description": "VS Code 안에서 백준 문제보기, 테스트 케이스 실행등 다양한 기능을 제공",
   "icon": "media/default_icon.png",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "engines": {
     "vscode": "^1.95.0"
   },
@@ -68,7 +68,11 @@
       "properties": {
         "BOJ-Tester.defaultLanguage": {
           "type": "string",
-          "description": "파일 생성 시 사용할 언어의 확장자 명을 입려해주세요. ex) py, java"
+          "description": "파일 생성 시 사용할 언어의 확장자 명을 입력해주세요.\n[지원 언어] py, java, js, cpp, c, kt, swift, go"
+        },
+        "BOJ-Tester.defaultPath": {
+          "type": "string",
+          "description": "파일 생성 시 저장될 경로를 입력해주세요. 입력하지 않을 시 열려있는 워크스페이스의 루트 경로에 저장됩니다."
         }
       }
     }
