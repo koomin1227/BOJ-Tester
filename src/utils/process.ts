@@ -18,7 +18,7 @@ class ChildProcess {
     }
 
     spawn(command: string, args: string[] = [], options?: SpawnOptionsWithoutStdio){
-        const workSpaceRootFolder = this.getWoerspaceRootFolder();
+        const workSpaceRootFolder = this.getWorkspaceRootFolder();
         if (!workSpaceRootFolder) {
             throw new Error('Fail to load work space root folder');
         }
@@ -30,7 +30,7 @@ class ChildProcess {
         });
     }
 
-    private getWoerspaceRootFolder() {
+    private getWorkspaceRootFolder() {
         const workspaceFolders = vscode.workspace.workspaceFolders;
         if (workspaceFolders) {
             return workspaceFolders[0].uri.fsPath;
