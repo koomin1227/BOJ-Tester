@@ -5,8 +5,8 @@ import { getDefaultLanguage, getDefaultPath } from './configuration';
 import { FILE_TEMPLATES } from './fileTemplates';
 
 export async function createProblemFile() {
-    const path = getFilePath();
-    if (path === null) {
+    const filePath = getFilePath();
+    if (filePath === null) {
         return null;
     }
 
@@ -19,7 +19,7 @@ export async function createProblemFile() {
         return null;
     }
 
-    const createdFilePath = await createFile(path, `${problemId}.${extension}`);
+    const createdFilePath = await createFile(filePath, `${problemId}.${extension}`);
     if (createdFilePath === null) {
         return null;
     }
