@@ -186,8 +186,21 @@ function compileAndRunC(filePath: string) {
 }
 
 function compileAndRun(filePath: string, compiler: 'gcc' | 'g++') {
+    const extension = filePath.split('.').pop()?.toLowerCase() as string;
     const outputFile = filePath.replace(/\.(c|cpp)$/, '');
-    execSync(`${compiler} "${filePath}" -o "${outputFile}"`);
+    const config = vscode.workspace.getConfiguration('BOJ-Tester');
+    const useCustomCommand = config.get<boolean>('useCustomCommand', false);
+    const customCommands = config.get<{ [key: string]: string }>('customCommands', {});
+
+
+    let compileCommand: string;
+    if (useCustomCommand && extension && customCommands[extension]) {
+        compileCommand = `${customCommands[extension]} "${filePath}" -o "${outputFile}"`;
+    } else {
+        compileCommand = `${compiler} "${filePath}" -o "${outputFile}"`;
+    }
+    
+    execSync(compileCommand);
     return childProcess.spawn(`${outputFile}`)
         .on('close', () => childProcess.spawn(process.platform === 'win32' ? 'del' : 'rm', [outputFile]));
 }

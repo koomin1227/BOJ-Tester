@@ -61,7 +61,6 @@
         }
       ]
     },
-
     "configuration": {
       "type": "object",
       "title": "BOJ Tester",
@@ -73,6 +72,18 @@
         "BOJ-Tester.defaultPath": {
           "type": "string",
           "description": "파일 생성 시 저장될 경로를 입력해주세요. 입력하지 않을 시 열려있는 워크스페이스의 루트 경로에 저장됩니다."
+        },
+        "BOJ-Tester.useCustomCommand": {
+          "type": "boolean",
+          "default": false,
+          "description": "직접 입력한 컴파일 명령어로 컴파일하고자 할 때 체크해주세요"
+        },
+        "BOJ-Tester.customCommands": {
+          "type": "object",
+          "default": {
+            "cpp": "g++ -std=c++17"
+          },
+          "description": "언어별 커스텀 컴파일 명령어 작성"
         }
       }
     }
