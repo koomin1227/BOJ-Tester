@@ -143,17 +143,24 @@ async function runCode(filePath: string, inputData: string): Promise<string> {
 
 function getProcessForRunning(filePath: string) {
     const extension = filePath.split('.').pop()?.toLowerCase();
+    const config = vscode.workspace.getConfiguration('BOJ-Tester');
+    const useCustomCommand = config.get<boolean>('useCustomCommand', false);
+    const customOptions = config.get<{ [key: string]: string }>('customCommandOption', {});
 
     switch (extension) {
         case 'py':
-            return childProcess.spawn(process.platform === 'win32' ? 'python' : 'python3', [filePath]);
+            const pythonCommand = process.platform === 'win32' ? 'python' : 'python3';
+            const pythonOptions = useCustomCommand && customOptions.py ? customOptions.py.split(' ') : [];
+            return childProcess.spawn(pythonCommand, [...pythonOptions, filePath]);
 
         case 'java':
             const dirName = path.dirname(filePath);
-		    return childProcess.spawn(`java`, ["-cp", dirName, filePath]);
+            const javaOptions = useCustomCommand && customOptions.java ? customOptions.java.split(' ') : [];
+            return childProcess.spawn('java', [...javaOptions, '-cp', dirName, filePath]);
 
         case 'js':
-            return childProcess.spawn('node', [filePath]);
+            const jsOptions = useCustomCommand && customOptions.js ? customOptions.js.split(' ') : [];
+            return childProcess.spawn('node', [...jsOptions, filePath]);
 
         case 'cpp':
             return compileAndRunCpp(filePath);
@@ -162,14 +169,17 @@ function getProcessForRunning(filePath: string) {
             return compileAndRunC(filePath);
 
         case 'kt':
-            return childProcess.spawn('kotlinc', [filePath, '-include-runtime', '-d', 'Program.jar'])
+            const ktOptions = useCustomCommand && customOptions.kt ? customOptions.kt.split(' ') : [];
+            return childProcess.spawn('kotlinc', [...ktOptions, filePath, '-include-runtime', '-d', 'Program.jar'])
                 .on('close', () => childProcess.spawn('java', ['-jar', 'Program.jar']));
 
         case 'swift':
-            return childProcess.spawn('swift', [filePath]);
+            const swiftOptions = useCustomCommand && customOptions.swift ? customOptions.swift.split(' ') : [];
+            return childProcess.spawn('swift', [...swiftOptions, filePath]);
 
         case 'go':
-            return childProcess.spawn('go', ['run', filePath]);
+            const goOptions = useCustomCommand && customOptions.go ? customOptions.go.split(' ') : [];
+            return childProcess.spawn('go', ['run', ...goOptions, filePath]);
 
         default:
             throw new Error(`Unsupported file type: .${extension}`);
@@ -186,8 +196,21 @@ function compileAndRunC(filePath: string) {
 }
 
 function compileAndRun(filePath: string, compiler: 'gcc' | 'g++') {
+    const extension = filePath.split('.').pop()?.toLowerCase() as string;
     const outputFile = filePath.replace(/\.(c|cpp)$/, '');
-    execSync(`${compiler} "${filePath}" -o "${outputFile}"`);
+    const config = vscode.workspace.getConfiguration('BOJ-Tester');
+    const useCustomCommand = config.get<boolean>('useCustomCommand', false);
+    const customOptions = config.get<{ [key: string]: string }>('customCommandOption', {});
+
+    let compileCommand: string;
+    if (useCustomCommand && extension && customOptions[extension]) {
+        const options = customOptions[extension].split(' ');
+        compileCommand = `${compiler} ${options.join(' ')} "${filePath}" -o "${outputFile}"`;
+    } else {
+        compileCommand = `${compiler} "${filePath}" -o "${outputFile}"`;
+    }
+    
+    execSync(compileCommand);
     return childProcess.spawn(`${outputFile}`)
         .on('close', () => childProcess.spawn(process.platform === 'win32' ? 'del' : 'rm', [outputFile]));
 }
