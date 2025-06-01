@@ -78,12 +78,45 @@
           "default": false,
           "description": "직접 입력한 컴파일 명령어로 컴파일하고자 할 때 체크해주세요"
         },
-        "BOJ-Tester.customCommands": {
-          "type": "object",
-          "default": {
-            "cpp": "g++ -std=c++17"
-          },
-          "description": "언어별 커스텀 컴파일 명령어 작성"
+        "BOJ-Tester.customCommandOption.py": {
+          "type": "string",
+          "default": "",
+          "description": "Python 파일(.py)을 실행할 때 사용할 커스텀 옵션을 입력하세요.\n예: -O\n설정을 비워두면 기본 'python' 명령어가 사용됩니다."
+        },
+        "BOJ-Tester.customCommandOption.java": {
+          "type": "string",
+          "default": "",
+          "description": "Java 파일(.java)을 컴파일할 때 사용할 커스텀 옵션을 입력하세요.\n예: -cp .:lib/*\n설정을 비워두면 기본 'javac' 명령어가 사용됩니다."
+        },
+        "BOJ-Tester.customCommandOption.js": {
+          "type": "string",
+          "default": "",
+          "description": "JavaScript 파일(.js)을 실행할 때 사용할 커스텀 옵션을 입력하세요.\n예: --experimental-modules\n설정을 비워두면 기본 'node' 명령어가 사용됩니다."
+        },
+        "BOJ-Tester.customCommandOption.cpp": {
+          "type": "string",
+          "default": "",
+          "description": "C++ 파일(.cpp)을 컴파일할 때 사용할 커스텀 옵션을 입력하세요.\n예: -std=c++17\n설정을 비워두면 기본 'g++' 명령어가 사용됩니다."
+        },
+        "BOJ-Tester.customCommandOption.c": {
+          "type": "string",
+          "default": "",
+          "description": "C 파일(.c)을 컴파일할 때 사용할 커스텀 옵션을 입력하세요.\n예: -std=c11\n설정을 비워두면 기본 'gcc' 명령어가 사용됩니다."
+        },
+        "BOJ-Tester.customCommandOption.kt": {
+          "type": "string",
+          "default": "",
+          "description": "Kotlin 파일(.kt)을 컴파일할 때 사용할 커스텀 옵션을 입력하세요.\n예: -jvm-target 1.8\n설정을 비워두면 기본 'kotlinc' 명령어가 사용됩니다."
+        },
+        "BOJ-Tester.customCommandOption.swift": {
+          "type": "string",
+          "default": "",
+          "description": "Swift 파일(.swift)을 컴파일할 때 사용할 커스텀 옵션을 입력하세요.\n예: -swift-version 5\n설정을 비워두면 기본 'swift' 명령어가 사용됩니다."
+        },
+        "BOJ-Tester.customCommandOption.go": {
+          "type": "string",
+          "default": "",
+          "description": "Go 파일(.go)을 실행할 때 사용할 커스텀 옵션을 입력하세요.\n예: -race\n설정을 비워두면 기본 'go run' 명령어가 사용됩니다."
         }
       }
     }
