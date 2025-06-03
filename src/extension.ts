@@ -4,6 +4,8 @@ import { SidebarProvider } from './providers/sidebarProvider';
 import { createAndOpenProblemFile } from './commands/createProblemFile';
 import { checkSettingsAndOpenIfMissing } from './utils/configuration';
 import { toggleIdeFeature } from './commands/toggleIdeFeature';
+import { FileTreeProvider } from './providers/FileTreeProvider';
+import { openFileAndProblemInfo } from './commands/openFileAndProblemInfo';
 
 export function activate(context: vscode.ExtensionContext) {
 	checkSettingsAndOpenIfMissing(context);
@@ -14,6 +16,9 @@ export function activate(context: vscode.ExtensionContext) {
 			new SidebarProvider(context.extensionUri)
 		)
 	);
+
+	const treeProvider = new FileTreeProvider();
+  	vscode.window.registerTreeDataProvider('bojTester.tree', treeProvider);
 	
 	context.subscriptions.push(
 		vscode.commands.registerCommand('boj-tester.openProblemInfo', () => {
@@ -31,6 +36,12 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand('boj-tester.createProblem', () => {
 			createAndOpenProblemFile(context);
 		})
+	);
+
+	context.subscriptions.push(
+	vscode.commands.registerCommand('boj-tester.openFileAndProblemInfo', (fileUri: vscode.Uri) => {
+		openFileAndProblemInfo(context, fileUri);
+	})
 	);
 
 	context.subscriptions.push(
