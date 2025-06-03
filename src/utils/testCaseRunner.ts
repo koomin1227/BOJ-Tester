@@ -192,7 +192,6 @@ function compileAndRun(filePath: string, compiler: 'gcc' | 'g++') {
     const extension = filePath.split('.').pop()?.toLowerCase() as string;
     const outputFile = filePath.replace(/\.(c|cpp)$/, '');
     const config = vscode.workspace.getConfiguration('BOJ-Tester');
-    // const useCustomCommand = config.get<boolean>('useCustomCommand', false);
     const customOptions = config.get<{ [key: string]: string }>('customCommandOption', {});
 
     let compileCommand: string;
