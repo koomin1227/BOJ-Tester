@@ -38,6 +38,10 @@
         "title": "문제 파일을 생성합니다."
       },
       {
+        "command": "boj-tester.openFileAndProblemInfo",
+        "title": "파일을 열고, 문제창을 엽니다."
+      },
+      {
         "command": "boj-tester.openSettings",
         "title": "설정창을 엽니다.",
         "icon": "$(gear)"
@@ -49,6 +53,10 @@
           "type": "webview",
           "id": "bojTester",
           "name": "BOJ Tester"
+        },
+        {
+          "id": "bojTester.tree",
+          "name": "문제 파일 탐색기"
         }
       ]
     },
@@ -67,31 +75,22 @@
       "properties": {
         "BOJ-Tester.defaultLanguage": {
           "type": "string",
-          "description": "파일 생성 시 사용할 언어의 확장자 명을 입력해주세요.\n[지원 언어] py, java, js, cpp, c, kt, swift, go"
+          "default": "py",
+          "enum": [
+            "py",
+            "java",
+            "js",
+            "cpp",
+            "c",
+            "kt",
+            "swift",
+            "go"
+          ],
+          "description": "파일 생성 시 사용할 언어의 확장자 명을 입력해주세요."
         },
         "BOJ-Tester.defaultPath": {
           "type": "string",
           "description": "파일 생성 시 저장될 경로를 입력해주세요. 입력하지 않을 시 열려있는 워크스페이스의 루트 경로에 저장됩니다."
-        },
-        "BOJ-Tester.useCustomCommand": {
-          "type": "boolean",
-          "default": false,
-          "description": "직접 입력한 컴파일 명령어로 컴파일하고자 할 때 체크해주세요"
-        },
-        "BOJ-Tester.customCommandOption.py": {
-          "type": "string",
-          "default": "",
-          "description": "Python 파일(.py)을 실행할 때 사용할 커스텀 옵션을 입력하세요.\n예: -O\n설정을 비워두면 기본 'python' 명령어가 사용됩니다."
-        },
-        "BOJ-Tester.customCommandOption.java": {
-          "type": "string",
-          "default": "",
-          "description": "Java 파일(.java)을 컴파일할 때 사용할 커스텀 옵션을 입력하세요.\n예: -cp .:lib/*\n설정을 비워두면 기본 'javac' 명령어가 사용됩니다."
-        },
-        "BOJ-Tester.customCommandOption.js": {
-          "type": "string",
-          "default": "",
-          "description": "JavaScript 파일(.js)을 실행할 때 사용할 커스텀 옵션을 입력하세요.\n예: --experimental-modules\n설정을 비워두면 기본 'node' 명령어가 사용됩니다."
         },
         "BOJ-Tester.customCommandOption.cpp": {
           "type": "string",
@@ -102,21 +101,6 @@
           "type": "string",
           "default": "",
           "description": "C 파일(.c)을 컴파일할 때 사용할 커스텀 옵션을 입력하세요.\n예: -std=c11\n설정을 비워두면 기본 'gcc' 명령어가 사용됩니다."
-        },
-        "BOJ-Tester.customCommandOption.kt": {
-          "type": "string",
-          "default": "",
-          "description": "Kotlin 파일(.kt)을 컴파일할 때 사용할 커스텀 옵션을 입력하세요.\n예: -jvm-target 1.8\n설정을 비워두면 기본 'kotlinc' 명령어가 사용됩니다."
-        },
-        "BOJ-Tester.customCommandOption.swift": {
-          "type": "string",
-          "default": "",
-          "description": "Swift 파일(.swift)을 컴파일할 때 사용할 커스텀 옵션을 입력하세요.\n예: -swift-version 5\n설정을 비워두면 기본 'swift' 명령어가 사용됩니다."
-        },
-        "BOJ-Tester.customCommandOption.go": {
-          "type": "string",
-          "default": "",
-          "description": "Go 파일(.go)을 실행할 때 사용할 커스텀 옵션을 입력하세요.\n예: -race\n설정을 비워두면 기본 'go run' 명령어가 사용됩니다."
         }
       }
     }
