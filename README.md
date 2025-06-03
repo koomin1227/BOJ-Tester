@@ -44,8 +44,9 @@ BOJ Tester를 사용하려면 해당 프로그래밍 언어의 실행 환경이 
 BOJ Tester는 다음과 같은 설정을 제공합니다:
 
 * `BOJ-Tester.defaultLanguage`: 문제 파일 생성 시 사용할 기본 확장자 (예: py, java, cpp)
-* `BOJ-Tester.customCommands`: 언어별 원하는 커스텀 컴파일 명령어 작성  
-    * 컴파일 옵션을 직접 지정할 때 사용합니다 (예: `-std=c++17`)  
+* `BOJ-Tester.customCommands`: 커스텀 컴파일 명령어 사용
+  * c, cpp 에서 버전 별 컴파일 환경을 지원하기 위한 설정입니다. (예: C++17, C++11, C99) 
+  * 컴파일 옵션을 직접 입력하면 해당 옵션을 추가한채 컴파일 합니다. (예: `-std=c++17`)  
 ### 설정 방법
 1. BOJ Tester 사이드바 열기
 2. 사이드바의 제목 오른쪽에 위치한 톱니바퀴 아이콘 클릭

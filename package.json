@@ -4,7 +4,7 @@
   "displayName": "BOJ Tester",
   "description": "VS Code 안에서 백준 문제보기, 테스트 케이스 실행등 다양한 기능을 제공",
   "icon": "media/default_icon.png",
-  "version": "1.0.10",
+  "version": "1.1.0",
   "engines": {
     "vscode": "^1.95.0"
   },
