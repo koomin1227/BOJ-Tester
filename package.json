@@ -4,7 +4,7 @@
   "displayName": "BOJ Tester",
   "description": "VS Code 안에서 백준 문제보기, 테스트 케이스 실행등 다양한 기능을 제공",
   "icon": "media/default_icon.png",
-  "version": "1.0.10",
+  "version": "1.1.0",
   "engines": {
     "vscode": "^1.95.0"
   },
@@ -38,6 +38,10 @@
         "title": "문제 파일을 생성합니다."
       },
       {
+        "command": "boj-tester.openFileAndProblemInfo",
+        "title": "파일을 열고, 문제창을 엽니다."
+      },
+      {
         "command": "boj-tester.openSettings",
         "title": "설정창을 엽니다.",
         "icon": "$(gear)"
@@ -49,6 +53,10 @@
           "type": "webview",
           "id": "bojTester",
           "name": "BOJ Tester"
+        },
+        {
+          "id": "bojTester.tree",
+          "name": "문제 파일 탐색기"
         }
       ]
     },
@@ -61,18 +69,38 @@
         }
       ]
     },
-
     "configuration": {
       "type": "object",
       "title": "BOJ Tester",
       "properties": {
         "BOJ-Tester.defaultLanguage": {
           "type": "string",
-          "description": "파일 생성 시 사용할 언어의 확장자 명을 입력해주세요.\n[지원 언어] py, java, js, cpp, c, kt, swift, go"
+          "default": "py",
+          "enum": [
+            "py",
+            "java",
+            "js",
+            "cpp",
+            "c",
+            "kt",
+            "swift",
+            "go"
+          ],
+          "description": "파일 생성 시 사용할 언어의 확장자 명을 입력해주세요."
         },
         "BOJ-Tester.defaultPath": {
           "type": "string",
           "description": "파일 생성 시 저장될 경로를 입력해주세요. 입력하지 않을 시 열려있는 워크스페이스의 루트 경로에 저장됩니다."
+        },
+        "BOJ-Tester.customCommandOption.cpp": {
+          "type": "string",
+          "default": "",
+          "description": "C++ 파일(.cpp)을 컴파일할 때 사용할 커스텀 옵션을 입력하세요.\n예: -std=c++17\n설정을 비워두면 기본 'g++' 명령어가 사용됩니다."
+        },
+        "BOJ-Tester.customCommandOption.c": {
+          "type": "string",
+          "default": "",
+          "description": "C 파일(.c)을 컴파일할 때 사용할 커스텀 옵션을 입력하세요.\n예: -std=c11\n설정을 비워두면 기본 'gcc' 명령어가 사용됩니다."
         }
       }
     }
