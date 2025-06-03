@@ -1,10 +1,10 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import { Problem, ProblemStats } from "../types";
-import { getCurrentOpenedFile, getProblemId } from '../utils/fileParser';
 import { getProlem } from '../utils/problemParser';
 import { runAndPrintAllTestCase, runAndPrintTestCase } from '../utils/testCaseRunner';
 import { addTestCase, deleteTestCase, editTestCase } from '../utils/testCaseManager';
+import { getCurrentOpenedFile, getProblemId } from '../utils/fileUtil';
 
 export const problemSet: Record<number, Problem> = {};
 

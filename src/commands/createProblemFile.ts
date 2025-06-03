@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
-import { createProblemFile } from '../utils/fileGenerator';
+
 import { openProblemInfo } from './openProblemInfo';
+import { createProblemFile, openFile } from '../utils/fileUtil';
 
 export async function createAndOpenProblemFile(context: vscode.ExtensionContext) {
     const filePath = await createProblemFile();
@@ -10,12 +11,4 @@ export async function createAndOpenProblemFile(context: vscode.ExtensionContext)
     await openFile(filePath);
 
     await openProblemInfo(context);
-}
-
-async function openFile(filePath: string) {
-    const document = await vscode.workspace.openTextDocument(vscode.Uri.file(filePath));
-    await vscode.window.showTextDocument(document, {
-        viewColumn: vscode.ViewColumn.One,
-        preview: false
-    });  
 }
