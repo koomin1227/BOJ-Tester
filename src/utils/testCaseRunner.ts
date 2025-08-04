@@ -67,6 +67,11 @@ function summarizeTestResults(testResults: TestCaseResult[]): string {
     return summary;
 }
 
+function checkOutput(output: string, expectedOutput: string): boolean {
+    return output === expectedOutput ||
+        output === expectedOutput + '\n';
+}
+
 export async function runTestCase(filePath: string, inputData: string, outputData: string): Promise<TestCaseResult> {
     try {
         const output = await runCode(filePath, inputData);
@@ -78,7 +83,7 @@ export async function runTestCase(filePath: string, inputData: string, outputDat
             expectedOutput: outputData,
             errorMessage: null
         };
-        if (output === outputData) {
+        if (checkOutput(output, outputData)) {
             testCaseResult.isSuccess = true;
         }
         return testCaseResult;
