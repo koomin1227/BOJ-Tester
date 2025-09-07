@@ -160,10 +160,10 @@ function getProcessForRunning(filePath: string) {
 
         case 'cpp':
             return compileAndRunCpp(filePath);
-
         case 'c':
             return compileAndRunC(filePath);
-
+        case 'rs':
+            return compileAndRunRust(filePath);
         case 'kt':
             return childProcess.spawn('kotlinc', [filePath, '-include-runtime', '-d', 'Program.jar'])
                 .on('close', () => childProcess.spawn('java', ['-jar', 'Program.jar']));
@@ -179,6 +179,10 @@ function getProcessForRunning(filePath: string) {
     }
 }
 
+function compileAndRunRust(filePath: string) {
+    return compileAndRun(filePath, 'rustc');
+}
+
 function compileAndRunCpp(filePath: string) {
     return compileAndRun(filePath, 'g++');
 }
@@ -188,9 +192,9 @@ function compileAndRunC(filePath: string) {
     return compileAndRun(filePath, 'gcc');
 }
 
-function compileAndRun(filePath: string, compiler: 'gcc' | 'g++') {
+function compileAndRun(filePath: string, compiler: 'gcc' | 'g++' | 'rustc') {
     const extension = filePath.split('.').pop()?.toLowerCase() as string;
-    const outputFile = filePath.replace(/\.(c|cpp)$/, '');
+    const outputFile = filePath.replace(/\.(c|cpp|rs)$/, '');
     const config = vscode.workspace.getConfiguration('BOJ-Tester');
     const customOptions = config.get<{ [key: string]: string }>('customCommandOption', {});
 
